@@ -751,37 +751,35 @@ test("新しい転送レコードが作成されないべき", () => {});
 [TDDの原則](https://www.sm-cloud.com/book-review-test-driven-development-by-example-a-tldr/)を学び、実践する — これは多くの人にとって非常に価値がありますが、自分のスタイルに合わない場合でも気にしないでください、あなたが唯一の人ではありません。コードの前にテストを書くことを検討し、[レッド・グリーン・リファクタリングスタイル](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html)を採用し、各テストが正確に1つのことをチェックするようにしましょう。バグを見つけた場合は、それを修正する前にそのバグを将来検出できるテストを書き、少なくとも1回はテストを失敗させた後に成功するようにしましょう。モジュールを始めるときは、最初にテストを満たすための簡単でシンプルなコードを書き、その後、徐々にリファクタリングして本番用の品質に仕上げていきます。環境（パス、OSなど）への依存は避けましょう。
 <br/>
 
-❌ **Otherwise:** 数十年にわたって集められた知恵の宝石を見逃すことになります
+❌ **さもなくば:** 数十年にわたって集められた知恵の宝石を見逃すことになります
 
 <br/><br/>
 
-# Section 2️⃣: Backend Testing
+# Section 2️⃣: バックエンドテスティング
 
-## ⚪ ️2.1 Enrich your testing portfolio: Look beyond unit tests and the pyramid
+## ⚪️ 2.1 あなたのテストポートフォリオを豊かにする：Unit testsとピラミッドを超えて
 
-:white_check_mark: **Do:** The [testing pyramid](https://martinfowler.com/bliki/TestPyramid.html), though 10> years old, is a great and relevant model that suggests three testing types and influences most developers’ testing strategy. At the same time, more than a handful of shiny new testing techniques emerged and are hiding in the shadows of the testing pyramid. Given all the dramatic changes that we’ve seen in the recent 10 years (Microservices, cloud, serverless), is it even possible that one quite-old model will suit *all* types of applications? shouldn’t the testing world consider welcoming new testing techniques?
+:white_check_mark: **やること：** [testing pyramid](https://martinfowler.com/bliki/TestPyramid.html)は10年以上前のものですが、3つのテストタイプを提案し、多くの開発者のテスト戦略に影響を与える素晴らしく関連性の高いモデルです。同時に、testing pyramidの影に隠れた輝かしい新しいテスト手法がいくつも登場しました。過去10年に見られた（Microservices、cloud、serverless）といった劇的な変化を考えると、一つの古いモデルが*全て*のアプリケーションタイプに適合することが可能なのでしょうか？テストの世界は新しいテスト手法を歓迎すべきではないでしょうか？
 
-Don’t get me wrong, in 2019 the testing pyramid, TDD and unit tests are still a powerful technique and are probably the best match for many applications. Only like any other model, despite its usefulness, [it must be wrong sometimes](https://en.wikipedia.org/wiki/All_models_are_wrong). For example, consider an IoT application that ingests many events into a message-bus like Kafka/RabbitMQ, which then flow into some data-warehouse and are eventually queried by some analytics UI. Should we really spend 50% of our testing budget on writing unit tests for an application that is integration-centric and has almost no logic? As the diversity of application types increase (bots, crypto, Alexa-skills) greater are the chances to find scenarios where the testing pyramid is not the best match.
+誤解しないでください。2019年においても、testing pyramid、TDD、unit testsは依然として強力な手法であり、多くのアプリケーションにとって最適な選択でしょう。しかし、他のどんなモデルと同様に、その有用性にもかかわらず、[時には間違っているに違いありません](https://en.wikipedia.org/wiki/All_models_are_wrong)。例えば、Kafka/RabbitMQのようなメッセージバスに多くのイベントを取り込むIoTアプリケーションを考えてみましょう。これらはデータウェアハウスに流れ込み、最終的には分析用UIでクエリされます。ほとんどロジックがなく、統合が中心のアプリケーションに対して、テスト予算の50%をUnit testsの作成に費やすべきでしょうか？アプリケーションタイプの多様性が増すにつれて（bots、crypto、Alexa-skills）、testing pyramidが最適な適合ではないシナリオが見つかる可能性が高くなります。
 
-It’s time to enrich your testing portfolio and become familiar with more testing types (the next bullets suggest few ideas), mind models like the testing pyramid but also match testing types to real-world problems that you’re facing (‘Hey, our API is broken, let’s write consumer-driven contract testing!’), diversify your tests like an investor that build a portfolio based on risk analysis — assess where problems might arise and match some prevention measures to mitigate those potential risks
+あなたのテストポートフォリオを豊かにし、より多くのテストタイプに精通する時です（次の箇条書きでいくつかのアイデアを提案します）。testing pyramidのようなマインドモデルを持ちながらも、直面している現実の問題にテストタイプを合わせましょう（「おい、APIが壊れている。consumer-driven contract testingを書こう！」）。リスク分析に基づいてポートフォリオを構築する投資家のようにテストを多様化しましょう—問題が発生し得る箇所を評価し、それらの潜在的なリスクを軽減するための予防策を適用します。
 
-A word of caution: the TDD argument in the software world takes a typical false-dichotomy face, some preach to use it everywhere, others think it’s the devil. Everyone who speaks in absolutes is wrong :]
-
-<br/>
-
-❌ **Otherwise:** You’re going to miss some tools with amazing ROI, some like Fuzz, lint, and mutation can provide value in 10 minutes
+注意点：ソフトウェアの世界におけるTDDに関する議論は典型的な偽の二分法を呈しています。あらゆる場所で使うべきだと説く人もいれば、悪魔だと考える人もいます。絶対的な言い方をする人は皆、間違っています :]
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば：** 驚くほどROIの高いツールを見逃すことになります。Fuzz、lint、mutationのようなものは10分で価値を提供できます
+
+<details><summary>✏ <b>コード例</b></summary>
 
 <br/>
 
-### :clap: Doing It Right Example: Cindy Sridharan suggests a rich testing portfolio in her amazing post ‘Testing Microservices — the same way’
+### :clap: 正しい例: Cindy Sridharan は彼女の素晴らしい投稿『Testing Microservices — the same way』で豊富なテストポートフォリオを提案しています
 
-![alt text](assets/bp-12-rich-testing.jpeg "Cindy Sridharan suggests a rich testing portfolio in her amazing post ‘Testing Microservices — the sane way’")
+![alt text](assets/bp-12-rich-testing.jpeg "Cindy Sridharan は彼女の素晴らしい投稿『Testing Microservices — the sane way』で豊富なテストポートフォリオを提案しています")
 
-<strong class="markup--strong markup--p-strong">☺️Example: </strong><a href="https://www.youtube.com/watch?v=-2zP494wdUY&amp;feature=youtube" data-href="https://www.youtube.com/watch?v=-2zP494wdUY&amp;feature=youtu.be" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">[YouTube: “Beyond Unit Tests: 5 Shiny Node.JS Test Types (2018)” (Yoni Goldberg)](https://www.youtube.com/watch?v=-2zP494wdUY&feature=youtu.be)</a>
+<strong class="markup--strong markup--p-strong">☺️例: </strong><a href="https://www.youtube.com/watch?v=-2zP494wdUY&amp;feature=youtube" data-href="https://www.youtube.com/watch?v=-2zP494wdUY&amp;feature=youtu.be" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">[YouTube: “Beyond Unit Tests: 5 Shiny Node.JS Test Types (2018)” (Yoni Goldberg)](https://www.youtube.com/watch?v=-2zP494wdUY&feature=youtu.be)</a>
 
 <br/>
 
@@ -791,22 +789,22 @@ A word of caution: the TDD argument in the software world takes a typical false-
 
 <br/><br/>
 
-## ⚪ ️2.2 Component testing might be your best affair
+## ⚪ ️2.2 コンポーネントテストはあなたのベストな選択かもしれません
 
-:white_check_mark: **Do:** Each unit test covers a tiny portion of the application and it’s expensive to cover the whole, whereas end-to-end testing easily covers a lot of ground but is flaky and slower, why not apply a balanced approach and write tests that are bigger than unit tests but smaller than end-to-end testing? Component testing is the unsung song of the testing world — they provide the best from both worlds: reasonable performance and a possibility to apply TDD patterns + realistic and great coverage.
+:white_check_mark: **すべきこと:** 各ユニットテストはアプリケーションのごく一部をカバーしており、全体をカバーするには高コストです。一方、エンドツーエンドテストは多くを簡単にカバーできますが、信頼性が低く、遅いです。なぜ、バランスの取れたアプローチを適用し、ユニットテストより大きく、エンドツーエンドテストより小さいテストを書くことを考えないのでしょうか？コンポーネントテストはテストの世界の隠れた名曲です — 彼らは両者の良いところを提供します。妥当なパフォーマンスとTDDパターンの適用可能性、そして現実的で素晴らしいカバレッジを提供します。
 
-Component tests focus on the Microservice ‘unit’, they work against the API, don’t mock anything which belongs to the Microservice itself (e.g. real DB, or at least the in-memory version of that DB) but stub anything that is external like calls to other Microservices. By doing so, we test what we deploy, approach the app from outwards to inwards and gain great confidence in a reasonable amount of time.
+コンポーネントテストはマイクロサービスの「単位」に焦点を当てており、APIに対して動作し、マイクロサービス自体に属するもの（例えば、実際のDB、もしくは少なくともそのDBのインメモリ版）をモックせず、他のマイクロサービスへの呼び出しなどの外部のものはスタブします。この方法により、デプロイするものをテストし、アプリを外部から内部へとアプローチし、合理的な時間で大きな自信を得ることができます。
 <br/>
 
-❌ **Otherwise:** You may spend long days on writing unit tests to find out that you got only 20% system coverage
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** ユニットテストを書くことに長い日々を費やし、システムのたった20％しかカバーできていないことが分かるかもしれません。
 
 <br/>
 
-### :clap: Doing It Right Example: Supertest allows approaching Express API in-process (fast and cover many layers)
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: SupertestはExpress APIへのインプロセスアプローチを可能にします（高速で多くの層をカバー）
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Mocha-blue.svg "Examples with Mocha")
 
@@ -816,20 +814,20 @@ Component tests focus on the Microservice ‘unit’, they work against the API,
 
 <br/><br/>
 
-## ⚪ ️2.3 Ensure new releases don’t break the API using contract tests
+## ⚪ ️2.3 コントラクトテストを使用して新リリースがAPIを壊さないことを保証する
 
-:white_check_mark: **Do:** So your Microservice has multiple clients, and you run multiple versions of the service for compatibility reasons (keeping everyone happy). Then you change some field and ‘boom!’, some important client who relies on this field is angry. This is the Catch-22 of the integration world: It’s very challenging for the server side to consider all the multiple client expectations — On the other hand, the clients can’t perform any testing because the server controls the release dates. [Consumer-driven contracts and the framework PACT](https://docs.pact.io/) were born to formalize this process with a very disruptive approach — not the server defines the test plan of itself rather the client defines the tests of the… server! PACT can record the client expectation and put in a shared location, “broker”, so the server can pull the expectations and run on every build using PACT library to detect broken contracts — a client expectation that is not met. By doing so, all the server-client API mismatches are caught early during build/CI and might save you a great deal of frustration
+:white_check_mark: **すべきこと:** あなたのマイクロサービスには複数のクライアントがあり、互換性の理由で複数のバージョンのサービスを実行しています（すべての人を満足させるため）。そこで、何かフィールドを変更しようとしたら「ドカン！」と、そのフィールドに依存している重要なクライアントが怒ってしまいました。これは統合の世界のジレンマです：サーバー側が複数のクライアントの期待をすべて考慮するのは非常に挑戦的であり、一方でクライアントはサーバーがリリース日を制御するため、テストを実行できません。[Consumer-driven contracts とフレームワークPACT](https://docs.pact.io/)は、非常に革新的なアプローチでこのプロセスを形式化するために生まれました。サーバーは自分自身のテスト計画を定義するのではなく、クライアントがサーバーのテストを定義します！PACTはクライアントの期待を記録し、共有場所「ブローカー」に配置することで、サーバーがPACTライブラリを使用して各ビルドで期待を引き出し、破れた契約 — 満たされないクライアントの期待 — を検出することができます。この方法により、すべてのサーバークライアントAPIの不一致がビルド/CIの早期に発見され、大きなフラストレーションを避けることができるかもしれません。
 <br/>
 
-❌ **Otherwise:** The alternatives are exhausting manual testing or deployment fear
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 他の選択肢は疲れる手動テストやデプロイの恐怖です。
 
 <br/>
 
-### :clap: Doing It Right Example:
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例:
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20PACT-blue.svg "Examples with PACT")
 
@@ -839,29 +837,29 @@ Component tests focus on the Microservice ‘unit’, they work against the API,
 
 <br/><br/>
 
-## ⚪ ️ 2.4 Test your middlewares in isolation
+## ⚪ ️2.4 ミドルウェアを単体でテストする
 
-:white_check_mark: **Do:** Many avoid Middleware testing because they represent a small portion of the system and require a live Express server. Both reasons are wrong — Middlewares are small but affect all or most of the requests and can be tested easily as pure functions that get {req,res} JS objects. To test a middleware function one should just invoke it and spy ([using Sinon for example](https://www.npmjs.com/package/sinon)) on the interaction with the {req,res} objects to ensure the function performed the right action. The library [node-mock-http](https://www.npmjs.com/package/node-mocks-http) takes it even further and factors the {req,res} objects along with spying on their behavior. For example, it can assert whether the http status that was set on the res object matches the expectation (See example below)
+:white_check_mark: **すべきこと:** ミドルウェアテストを避ける人は多いですが、それはシステムの小さな部分であり、ライブのExpressサーバーを必要とするからです。これらの理由はどちらも間違っています —  ミドルウェアは小さいですが、すべてまたはほとんどのリクエストに影響を与え、{req,res} JSオブジェクトを受け取る純関数として簡単にテストできます。ミドルウェア関数をテストするには、それを呼び出し、{req,res}オブジェクトとのやりとりをスパイ（例えば[Sinonを使用して](https://www.npmjs.com/package/sinon)）して、関数が正しいアクションを実行したことを確認するだけでいいのです。[node-mock-http](https://www.npmjs.com/package/node-mocks-http)ライブラリは、{req,res}オブジェクトを因数分解し、それらの振る舞いをスパイすることさらに進みます。例えば、resオブジェクトに設定されたHTTPステータスが期待に合っているかをアサートできます（以下の例を参照）。
 <br/>
 
-❌ **Otherwise:** A bug in Express middleware === a bug in all or most requests
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** Expressミドルウェアのバグ === すべてまたはほとんどのリクエストのバグ
 
 <br/>
 
-### :clap:Doing It Right Example: Testing middleware in isolation without issuing network calls and waking-up the entire Express machine
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: ネットワーク呼び出しを発行せず、Express全体を起動させずにミドルウェアを単体でテスト
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Jest-blue.svg "Examples with Jest")
 
 ```javascript
-//the middleware we want to test
+// テストしたいミドルウェア
 const unitUnderTest = require("./middleware");
 const httpMocks = require("node-mocks-http");
-//Jest syntax, equivelant to describe() & it() in Mocha
-test("A request without authentication header, should return http status 403", () => {
+// Jestの文法、Mochaのdescribe() & it()と同等
+test("認証ヘッダーなしのリクエストは、httpステータス403を返すべき", () => {
   const request = httpMocks.createRequest({
     method: "GET",
     url: "/user/42",
@@ -879,23 +877,23 @@ test("A request without authentication header, should return http status 403", (
 
 <br/><br/>
 
-## ⚪ ️2.5 Measure and refactor using static analysis tools
+## ⚪ ️2.5 静的解析ツールを使用して測定しリファクタリング
 
-:white_check_mark: **Do:** Using static analysis tools helps by giving objective ways to improve code quality and keep your code maintainable. You can add static analysis tools to your CI build to abort when it finds code smells. Its main selling points over plain linting are the ability to inspect quality in the context of multiple files (e.g. detect duplications), perform advanced analysis (e.g. code complexity) and follow the history and progress of code issues. Two examples of tools you can use are [SonarQube](https://www.sonarqube.org/) (4,900+ [stars](https://github.com/SonarSource/sonarqube)) and [Code Climate](https://codeclimate.com/) (2,000+ [stars](https://github.com/codeclimate/codeclimate))
+:white_check_mark: **すべきこと:** 静的解析ツールを使用することで、コードの品質を向上させ、コードを保守可能に保つための客観的な方法が提供されます。静的解析ツールをCIビルドに追加して、コードの悪臭を発見したときにビルドを中止することができます。通常のリンティングに対する主な売りのポイントは、複数のファイルの文脈で品質を検査する能力（例: 重複の検出）、高度な解析の実施（例: コードの複雑さ）そしてコードの問題の履歴と進捗の追跡です。使用できるツールの例として、[SonarQube](https://www.sonarqube.org/)（4,900以上の[stars](https://github.com/SonarSource/sonarqube)）と[Code Climate](https://codeclimate.com/)（2,000以上の[stars](https://github.com/codeclimate/codeclimate)）があります。
 
-Credit: <a href="https://github.com/TheHollidayInn" data-href="https://github.com/TheHollidayInn" class="markup--anchor markup--p-anchor" rel="noopener nofollow" target="_blank">[Keith Holliday](https://github.com/TheHollidayInn)</a>
-
-<br/>
-
-❌ **Otherwise:** With poor code quality, bugs and performance will always be an issue that no shiny new library or state of the art features can fix
+クレジット: <a href="https://github.com/TheHollidayInn" data-href="https://github.com/TheHollidayInn" class="markup--anchor markup--p-anchor" rel="noopener nofollow" target="_blank">[Keith Holliday](https://github.com/TheHollidayInn)</a>
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 低品質のコードでは、バグとパフォーマンスが常に問題となり、どんな新しいライブラリや最先端の機能でも解決できません。
 
 <br/>
 
-### :clap: Doing It Right Example: CodeClimate, a commercial tool that can identify complex methods:
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: 複雑なメソッドを識別できる商用ツールCodeClimate:
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Code%20Climate-blue.svg "Examples with CodeClimate")
 
@@ -905,20 +903,20 @@ Credit: <a href="https://github.com/TheHollidayInn" data-href="https://github.co
 
 <br/><br/>
 
-## ⚪ ️ 2.6 Check your readiness for Node-related chaos
+## ⚪ ️2.6 Node関連のカオスへの準備を確認する
 
-:white_check_mark: **Do:** Weirdly, most software testings are about logic & data only, but some of the worst things that happen (and are really hard to mitigate) are infrastructural issues. For example, did you ever test what happens when your process memory is overloaded, or when the server/process dies, or does your monitoring system realizes when the API becomes 50% slower?. To test and mitigate these type of bad things — [Chaos engineering](https://principlesofchaos.org/) was born by Netflix. It aims to provide awareness, frameworks and tools for testing our app resiliency for chaotic issues. For example, one of its famous tools, [the chaos monkey](https://github.com/Netflix/chaosmonkey), randomly kills servers to ensure that our service can still serve users and not relying on a single server (there is also a Kubernetes version, [kube-monkey](https://github.com/asobti/kube-monkey), that kills pods). All these tools work on the hosting/platform level, but what if you wish to test and generate pure Node chaos like check how your Node process copes with uncaught errors, unhandled promise rejection, v8 memory overloaded with the max allowed of 1.7GB or whether your UX remains satisfactory when the event loop gets blocked often? to address this I’ve written, [node-chaos](https://github.com/i0natan/node-chaos-monkey) (alpha) which provides all sort of Node-related chaotic acts
+:white_check_mark: **すべきこと:** 奇妙なことに、ほとんどのソフトウェアテストはロジックとデータのみですが、最悪の出来事（そして本当に緩和が難しいもの）はインフラストラクチャの問題です。例えば、プロセスメモリが過負荷になったり、サーバー/プロセスがクラッシュしたり、APIの処理が50％遅くなったときに監視システムが認識するかどうかをテストしたことがありますか？これらの悪影響をテストして緩和するために — [カオスエンジニアリング](https://principlesofchaos.org/)はNetflixによって生み出されました。これは、混乱した問題に対するアプリの回復力をテストするための認識、フレームワーク、ツールを提供することを目的としています。例えば、その有名なツールの一つ、[カオスモンキー](https://github.com/Netflix/chaosmonkey)はサーバーをランダムに停止させることで、サービスがユーザーにサービスを提供し続け、単一のサーバーに依存しないことを確認します（また、Kubernetes版としてポッドを停止する[kube-monkey](https://github.com/asobti/kube-monkey)もあります）。これらのツールはすべてホスティング/プラットフォームレベルで機能しますが、純粋なNodeカオスをテストおよび生成したい場合はどうでしょうか。たとえば、Nodeプロセスが未処理のエラー、未処理のpromise拒否、1.7GBの最大許可メモリでのv8メモリ過負荷にどのように対処するか、またはイベントループが頻繁にブロックされるときにUXが満足な状態であるかどうかを確認する場合などを考慮するために、私は[node-chaos](https://github.com/i0natan/node-chaos-monkey)（アルファ版）を作成しました、これはNode関連のカオス的な行為をすべて提供します。
 <br/>
 
-❌ **Otherwise:** No escape here, Murphy’s law will hit your production without mercy
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** ここには逃げ場はありません、マーフィーの法則があなたのプロダクションを容赦なく襲撃します
 
 <br/>
 
-### :clap: Doing It Right Example: : Node-chaos can generate all sort of Node.js pranks so you can test how resilience is your app to chaos
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: Node-chaosはあらゆる種類のNode.jsのいたずらを生成し、アプリのカオスへの耐性をテストできます
 
 ![alt text](assets/bp-17-yoni-goldberg-chaos-monkey-nodejs.png "Node-chaos can generate all sort of Node.js pranks so you can test how resilience is your app to chaos")
 
@@ -926,49 +924,49 @@ Credit: <a href="https://github.com/TheHollidayInn" data-href="https://github.co
 
 <br/>
 
-## ⚪ ️2.7 Avoid global test fixtures and seeds, add data per-test
+## ⚪ ️2.7 グローバルなテストフィクスチャとシードを避け、テストごとにデータを追加する
 
-:white_check_mark: **Do:** Going by the golden rule (bullet 0), each test should add and act on its own set of DB rows to prevent coupling and easily reason about the test flow. In reality, this is often violated by testers who seed the DB with data before running the tests (also known as ‘test fixture’) for the sake of performance improvement. While performance is indeed a valid concern — it can be mitigated (see “Component testing” bullet), however, test complexity is a much painful sorrow that should govern other considerations most of the time. Practically, make each test case explicitly add the DB records it needs and act only on those records. If performance becomes a critical concern — a balanced compromise might come in the form of seeding the only suite of tests that are not mutating data (e.g. queries)
+:white_check_mark: **すべきこと:** ゴールデンルール（箇条書き0）に従うと、各テストは独自のDB行セットを追加し、それに基づいて動作し、結合を防ぎ、テストフローについて簡単に理由づけできるようにすべきです。現実には、パフォーマンス向上のためにテスト前にDBにデータをシード（いわゆる「テストフィクスチャ」）を行うテスターにより、このルールはしばしば違反されます。確かにパフォーマンスは正当な懸念ですが（「コンポーネントテスト」の箇条書きを参照）、テストの複雑さは他の考慮事項を支配すべき辛い問題です。実践的には、各テストケースが必要なDBレコードを明示的に追加し、それらのレコードのみに基づいて動作します。もしパフォーマンスが重要な懸念となった場合は、データを変化させない一部のテストスイート（例: クエリ）のみをシードするという形でバランスの取れた妥協があるかもしれません。
 <br/>
 
-❌ **Otherwise:** Few tests fail, a deployment is aborted, our team is going to spend precious time now, do we have a bug? let’s investigate, oh no — it seems that two tests were mutating the same seed data
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** いくつかのテストが失敗し、デプロイが中止され、私たちのチームは貴重な時間を費やすことになり、「バグがありますか？」と調査することになり、とても大変です。そして、「あぁ、2つのテストが同じシードデータを変化させていました」と気づくのです。
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: tests are not independent and rely on some global hook to feed global DB data
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :thumbsdown: アンチパターン例: テストが独立しておらず、グローバルなフックに依存してグローバルなDBデータを供給
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Mocha-blue.svg "Examples with Mocha")
 
 ```javascript
 before(async () => {
-  //adding sites and admins data to our DB. Where is the data? outside. At some external json or migration framework
+  // サイトと管理者データをDBに追加します。データはどこですか？外部です。いくつかの外部jsonまたは移行フレームワーク
   await DB.AddSeedDataFromJson('seed.json');
 });
-it("When updating site name, get successful confirmation", async () => {
-  //I know that site name "portal" exists - I saw it in the seed files
+it("サイト名を更新すると、成功の確認を得る", async () => {
+  // サイト名 "portal" が存在することを知っている - シードファイルでそれを見た
   const siteToUpdate = await SiteService.getSiteByName("Portal");
   const updateNameResult = await SiteService.changeName(siteToUpdate, "newName");
   expect(updateNameResult).to.be(true);
 });
-it("When querying by site name, get the right site", async () => {
-  //I know that site name "portal" exists - I saw it in the seed files
+it("サイト名でクエリすると、正しいサイトを取得する", async () => {
+  // サイト名 "portal" が存在することを知っている - シードファイルでそれを見た
   const siteToCheck = await SiteService.getSiteByName("Portal");
-  expect(siteToCheck.name).to.be.equal("Portal"); //Failure! The previous test change the name :[
+  expect(siteToCheck.name).to.be.equal("Portal"); // 失敗！前のテストで名前が変更された :[
 });
 
 ```
 
 <br/>
 
-### :clap: Doing It Right Example: We can stay within the test, each test acts on its own set of data
+### :clap: 正しい例: テスト内で実施し続けられ、各テストは独自のデータセットで動作
 
 ```javascript
-it("When updating site name, get successful confirmation", async () => {
-  //test is adding a fresh new records and acting on the records only
+it("サイト名を更新すると、成功の確認を得る", async () => {
+  // テストは新しいレコードを追加し、レコードに対してのみ動作する
   const siteUnderTest = await SiteService.addSite({
     name: "siteForUpdateTest"
   });
