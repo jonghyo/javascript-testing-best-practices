@@ -484,7 +484,7 @@ describe("Product service", () => {
 
 ## ⚪ ️ 1.8 必要に応じて、短くインラインのスナップショットを使用
 
-:white_check_mark: **やるべきこと:** [スナップショットテスト](https://jestjs.io/docs/en/snapshot-testing)が必要な場合、短く集中したスナップショット（3〜7行程度）を使用し、テストの一部としてインラインで含めること（[Inline Snapshot](https://jestjs.io/docs/en/snapshot-testing#inline-snapshots)）が推奨されます。外部ファイルに保存しないことで、テストは自己説明的で壊れにくくなります。
+:white_check_mark: **こうしましょう:** [スナップショットテスト](https://jestjs.io/docs/en/snapshot-testing)が必要な場合、短く集中したスナップショット（3〜7行程度）を使用し、テストの一部としてインラインで含めること（[Inline Snapshot](https://jestjs.io/docs/en/snapshot-testing#inline-snapshots)）が推奨されます。外部ファイルに保存しないことで、テストは自己説明的で壊れにくくなります。
 
 一方で、「クラシックスナップショット」のチュートリアルやツールは、大きなファイル（例：コンポーネントのレンダリングマークアップやAPIのJSON結果）を外部に保存し、テスト実行時に受け取った結果と保存されたバージョンを比較することを推奨しています。しかし、これにより、テストが1000行や3000個のデータ値に暗黙的に結び付けられ、テスト作成者がそれを読んで理解することができなくなります。なぜこれが問題なのでしょうか？ その理由は多岐にわたり、スナップショットが無効になるのに1行の変更で十分で、これは頻繁に発生します。具体的には、スペース、コメント、CSS/HTMLの小さな変更ごとに起こり得ます。このような場合、テスト名からエラーの手がかりを得ることは難しく、単に1000行が変更されなかったかをチェックするだけになります。また、テスト作成者が確認も検証もできない長文ドキュメントを望ましい真実として受け入れるように促します。これらはすべて、焦点が定まらず、過剰な目標を達成しようとする不透明で過度なテストの症状です。
 
@@ -551,7 +551,7 @@ it("When visiting TestJavaScript.com home page, a menu is displayed", () => {
 
 ## ⚪ ️ 1.9 必要なコードのみをコピーする
 
-:white_check_mark: **Do:** テスト結果に影響を与える必要な詳細はすべて含めますが、それ以上は含めません。例えば、100行の入力JSONを処理するテストを考えてみましょう。これを毎回テストに貼り付けるのは手間です。これを外部に抽出して `transferFactory.getJSON()` とすると、テストが曖昧になってしまいます — データがなければ、テスト結果とその原因を関連付けるのが難しくなります（「なぜ400ステータスを返すべきなのか？」）。古典的な書籍「x-unitパターン」では、このパターンを「謎のゲスト」と呼んでいます — 何か見えないものがテスト結果に影響を与えていますが、正確には何が影響を与えたのか分かりません。繰り返し使われる長い部分を外部に抽出し、テストに重要な具体的な詳細を明示的に示すことで、改善できます。上記の例を使うと、テストは重要な部分を強調するパラメーターを渡すことができます：`transferFactory.getJSON({sender: undefined})`。この例では、読者はすぐに「senderフィールドが空であることが、テストがバリデーションエラーやその他の適切な結果を期待する理由である」と推測すべきです。
+:white_check_mark: **こうしましょう:** テスト結果に影響を与える必要な詳細はすべて含めますが、それ以上は含めません。例えば、100行の入力JSONを処理するテストを考えてみましょう。これを毎回テストに貼り付けるのは手間です。これを外部に抽出して `transferFactory.getJSON()` とすると、テストが曖昧になってしまいます — データがなければ、テスト結果とその原因を関連付けるのが難しくなります（「なぜ400ステータスを返すべきなのか？」）。古典的な書籍「x-unitパターン」では、このパターンを「謎のゲスト」と呼んでいます — 何か見えないものがテスト結果に影響を与えていますが、正確には何が影響を与えたのか分かりません。繰り返し使われる長い部分を外部に抽出し、テストに重要な具体的な詳細を明示的に示すことで、改善できます。上記の例を使うと、テストは重要な部分を強調するパラメーターを渡すことができます：`transferFactory.getJSON({sender: undefined})`。この例では、読者はすぐに「senderフィールドが空であることが、テストがバリデーションエラーやその他の適切な結果を期待する理由である」と推測すべきです。
 <br/>
 
 ❌ **さもなくば:** 500行のJSONをコピーすることは、テストを維持不可能で読みにくくします。すべてを外部に移動すると、理解しにくい曖昧なテストが生まれます
@@ -605,7 +605,7 @@ test("クレジットがない場合、転送は拒否される", async() => {
 
 ## ⚪ ️ 1.10 エラーをキャッチせず、エラーを期待する
 
-:white_check_mark: **やるべきこと:** ある入力がエラーを引き起こすことをアサートしようとするとき、try-catch-finallyを使用してcatch句が実行されたことを確認するのは正しいように見えるかもしれません。しかし、その結果はシンプルなテストの意図や結果の期待を隠してしまう、冗長で不格好なテストケースになります（以下の例参照）。
+:white_check_mark: **こうしましょう:** ある入力がエラーを引き起こすことをアサートしようとするとき、try-catch-finallyを使用してcatch句が実行されたことを確認するのは正しいように見えるかもしれません。しかし、その結果はシンプルなテストの意図や結果の期待を隠してしまう、冗長で不格好なテストケースになります（以下の例参照）。
 
 よりエレガントな代替手段は、専用のChaiアサーションを1行で使用することです：expect(method).to.throw（またはJestではexpect(method).toThrow()）。また、例外がエラータイプを示すプロパティを含むことを確認することが絶対に必要です。さもないと、単なる一般的なエラーを渡すだけでは、アプリケーションはユーザーに失望させるメッセージを表示する以外に多くのことができません。
 
@@ -656,7 +656,7 @@ it("商品名がない場合、エラー400をスローする", async () => {
 
 ## ⚪ ️ 1.11 テストにタグを付ける
 
-:white_check_mark: **やるべきこと:** 異なるテストは異なるシナリオで実行する必要があります。例えば、クイックなスモークテストやI/Oレスなテストは、開発者がファイルを保存またはコミットしたときに実行し、フルなエンドツーエンドテストは通常、プルリクエストが提出されたときに実行されます。これを実現するためには、#cold #api #sanity などのキーワードでテストにタグを付け、テストハーネスでgrepを使って必要なサブセットを呼び出すことができます。例えば、Mochaでsanityテストグループのみを呼び出す方法は以下の通りです：mocha — grep ‘sanity’
+:white_check_mark: **こうしましょう:** 異なるテストは異なるシナリオで実行する必要があります。例えば、クイックなスモークテストやI/Oレスなテストは、開発者がファイルを保存またはコミットしたときに実行し、フルなエンドツーエンドテストは通常、プルリクエストが提出されたときに実行されます。これを実現するためには、#cold #api #sanity などのキーワードでテストにタグを付け、テストハーネスでgrepを使って必要なサブセットを呼び出すことができます。例えば、Mochaでsanityテストグループのみを呼び出す方法は以下の通りです：mocha — grep ‘sanity’
 
 <br/>
 
@@ -690,7 +690,7 @@ describe("Order service", function() {
 
 ## ⚪ ️ 1.12 テストを少なくとも2つのレベルで分類する
 
-:white_check_mark: **するべきこと:** テストスイートにある程度の構造を適用し、偶然訪れる人がテストの要件（テストは最高のドキュメント）やテストされているさまざまなシナリオを簡単に理解できるようにします。この方法の一般的なものは、テストの前に少なくとも2つの'describe'ブロックを配置することです。1つ目はテスト対象のユニットの名前、2つ目はシナリオやカスタムカテゴリーなどの追加の分類レベルです（以下のコード例とスクリーンショットを参照）。これにより、テストレポートが大幅に改善されます：読者はテストのカテゴリーを簡単に推測し、希望するセクションに深入りして失敗したテストと相関させることができます。さらに、多くのテストを含むスイートのコードを開発者がナビゲートするのがずっと簡単になります。テストスイートの構造に関して、[given-when-then](https://github.com/searls/jasmine-given) や [RITE](https://github.com/ericelliott/riteway) などの複数の代替構造を検討することができます。
+:white_check_mark: **こうしましょう:** テストスイートにある程度の構造を適用し、偶然訪れる人がテストの要件（テストは最高のドキュメント）やテストされているさまざまなシナリオを簡単に理解できるようにします。この方法の一般的なものは、テストの前に少なくとも2つの'describe'ブロックを配置することです。1つ目はテスト対象のユニットの名前、2つ目はシナリオやカスタムカテゴリーなどの追加の分類レベルです（以下のコード例とスクリーンショットを参照）。これにより、テストレポートが大幅に改善されます：読者はテストのカテゴリーを簡単に推測し、希望するセクションに深入りして失敗したテストと相関させることができます。さらに、多くのテストを含むスイートのコードを開発者がナビゲートするのがずっと簡単になります。テストスイートの構造に関して、[given-when-then](https://github.com/searls/jasmine-given) や [RITE](https://github.com/ericelliott/riteway) などの複数の代替構造を検討することができます。
 
 <br/>
 
@@ -746,7 +746,7 @@ test("新しい転送レコードが作成されないべき", () => {});
 
 ## ⚪ ️1.13 その他の一般的な良いテスト習慣
 
-:white_check_mark: **Do:** この投稿は、Node JSに関連した、または少なくともNode JSを例に挙げて説明できるテストに関するアドバイスに焦点を当てています。ただし、この項目では、Nodeに関連しないいくつかのよく知られたアドバイスをまとめています。
+:white_check_mark: **こうしましょう:** この投稿は、Node JSに関連した、または少なくともNode JSを例に挙げて説明できるテストに関するアドバイスに焦点を当てています。ただし、この項目では、Nodeに関連しないいくつかのよく知られたアドバイスをまとめています。
 
 [TDDの原則](https://www.sm-cloud.com/book-review-test-driven-development-by-example-a-tldr/)を学び、実践する — これは多くの人にとって非常に価値がありますが、自分のスタイルに合わない場合でも気にしないでください、あなたが唯一の人ではありません。コードの前にテストを書くことを検討し、[レッド・グリーン・リファクタリングスタイル](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html)を採用し、各テストが正確に1つのことをチェックするようにしましょう。バグを見つけた場合は、それを修正する前にそのバグを将来検出できるテストを書き、少なくとも1回はテストを失敗させた後に成功するようにしましょう。モジュールを始めるときは、最初にテストを満たすための簡単でシンプルなコードを書き、その後、徐々にリファクタリングして本番用の品質に仕上げていきます。環境（パス、OSなど）への依存は避けましょう。
 <br/>
@@ -759,7 +759,7 @@ test("新しい転送レコードが作成されないべき", () => {});
 
 ## ⚪️ 2.1 あなたのテストポートフォリオを豊かにする：Unit testsとピラミッドを超えて
 
-:white_check_mark: **やること：** [testing pyramid](https://martinfowler.com/bliki/TestPyramid.html)は10年以上前のものですが、3つのテストタイプを提案し、多くの開発者のテスト戦略に影響を与える素晴らしく関連性の高いモデルです。同時に、testing pyramidの影に隠れた輝かしい新しいテスト手法がいくつも登場しました。過去10年に見られた（Microservices、cloud、serverless）といった劇的な変化を考えると、一つの古いモデルが*全て*のアプリケーションタイプに適合することが可能なのでしょうか？テストの世界は新しいテスト手法を歓迎すべきではないでしょうか？
+:white_check_mark: **こうしましょう：** [testing pyramid](https://martinfowler.com/bliki/TestPyramid.html)は10年以上前のものですが、3つのテストタイプを提案し、多くの開発者のテスト戦略に影響を与える素晴らしく関連性の高いモデルです。同時に、testing pyramidの影に隠れた輝かしい新しいテスト手法がいくつも登場しました。過去10年に見られた（Microservices、cloud、serverless）といった劇的な変化を考えると、一つの古いモデルが*全て*のアプリケーションタイプに適合することが可能なのでしょうか？テストの世界は新しいテスト手法を歓迎すべきではないでしょうか？
 
 誤解しないでください。2019年においても、testing pyramid、TDD、unit testsは依然として強力な手法であり、多くのアプリケーションにとって最適な選択でしょう。しかし、他のどんなモデルと同様に、その有用性にもかかわらず、[時には間違っているに違いありません](https://en.wikipedia.org/wiki/All_models_are_wrong)。例えば、Kafka/RabbitMQのようなメッセージバスに多くのイベントを取り込むIoTアプリケーションを考えてみましょう。これらはデータウェアハウスに流れ込み、最終的には分析用UIでクエリされます。ほとんどロジックがなく、統合が中心のアプリケーションに対して、テスト予算の50%をUnit testsの作成に費やすべきでしょうか？アプリケーションタイプの多様性が増すにつれて（bots、crypto、Alexa-skills）、testing pyramidが最適な適合ではないシナリオが見つかる可能性が高くなります。
 
@@ -791,7 +791,7 @@ test("新しい転送レコードが作成されないべき", () => {});
 
 ## ⚪ ️2.2 コンポーネントテストはあなたのベストな選択かもしれません
 
-:white_check_mark: **すべきこと:** 各ユニットテストはアプリケーションのごく一部をカバーしており、全体をカバーするには高コストです。一方、エンドツーエンドテストは多くを簡単にカバーできますが、信頼性が低く、遅いです。なぜ、バランスの取れたアプローチを適用し、ユニットテストより大きく、エンドツーエンドテストより小さいテストを書くことを考えないのでしょうか？コンポーネントテストはテストの世界の隠れた名曲です — 彼らは両者の良いところを提供します。妥当なパフォーマンスとTDDパターンの適用可能性、そして現実的で素晴らしいカバレッジを提供します。
+:white_check_mark: **こうしましょう:** 各ユニットテストはアプリケーションのごく一部をカバーしており、全体をカバーするには高コストです。一方、エンドツーエンドテストは多くを簡単にカバーできますが、信頼性が低く、遅いです。なぜ、バランスの取れたアプローチを適用し、ユニットテストより大きく、エンドツーエンドテストより小さいテストを書くことを考えないのでしょうか？コンポーネントテストはテストの世界の隠れた名曲です — 彼らは両者の良いところを提供します。妥当なパフォーマンスとTDDパターンの適用可能性、そして現実的で素晴らしいカバレッジを提供します。
 
 コンポーネントテストはマイクロサービスの「単位」に焦点を当てており、APIに対して動作し、マイクロサービス自体に属するもの（例えば、実際のDB、もしくは少なくともそのDBのインメモリ版）をモックせず、他のマイクロサービスへの呼び出しなどの外部のものはスタブします。この方法により、デプロイするものをテストし、アプリを外部から内部へとアプローチし、合理的な時間で大きな自信を得ることができます。
 <br/>
@@ -816,7 +816,7 @@ test("新しい転送レコードが作成されないべき", () => {});
 
 ## ⚪ ️2.3 コントラクトテストを使用して新リリースがAPIを壊さないことを保証する
 
-:white_check_mark: **すべきこと:** あなたのマイクロサービスには複数のクライアントがあり、互換性の理由で複数のバージョンのサービスを実行しています（すべての人を満足させるため）。そこで、何かフィールドを変更しようとしたら「ドカン！」と、そのフィールドに依存している重要なクライアントが怒ってしまいました。これは統合の世界のジレンマです：サーバー側が複数のクライアントの期待をすべて考慮するのは非常に挑戦的であり、一方でクライアントはサーバーがリリース日を制御するため、テストを実行できません。[Consumer-driven contracts とフレームワークPACT](https://docs.pact.io/)は、非常に革新的なアプローチでこのプロセスを形式化するために生まれました。サーバーは自分自身のテスト計画を定義するのではなく、クライアントがサーバーのテストを定義します！PACTはクライアントの期待を記録し、共有場所「ブローカー」に配置することで、サーバーがPACTライブラリを使用して各ビルドで期待を引き出し、破れた契約 — 満たされないクライアントの期待 — を検出することができます。この方法により、すべてのサーバークライアントAPIの不一致がビルド/CIの早期に発見され、大きなフラストレーションを避けることができるかもしれません。
+:white_check_mark: **こうしましょう:** あなたのマイクロサービスには複数のクライアントがあり、互換性の理由で複数のバージョンのサービスを実行しています（すべての人を満足させるため）。そこで、何かフィールドを変更しようとしたら「ドカン！」と、そのフィールドに依存している重要なクライアントが怒ってしまいました。これは統合の世界のジレンマです：サーバー側が複数のクライアントの期待をすべて考慮するのは非常に挑戦的であり、一方でクライアントはサーバーがリリース日を制御するため、テストを実行できません。[Consumer-driven contracts とフレームワークPACT](https://docs.pact.io/)は、非常に革新的なアプローチでこのプロセスを形式化するために生まれました。サーバーは自分自身のテスト計画を定義するのではなく、クライアントがサーバーのテストを定義します！PACTはクライアントの期待を記録し、共有場所「ブローカー」に配置することで、サーバーがPACTライブラリを使用して各ビルドで期待を引き出し、破れた契約 — 満たされないクライアントの期待 — を検出することができます。この方法により、すべてのサーバークライアントAPIの不一致がビルド/CIの早期に発見され、大きなフラストレーションを避けることができるかもしれません。
 <br/>
 
 ❌ **さもなくば:** 他の選択肢は疲れる手動テストやデプロイの恐怖です。
@@ -839,7 +839,7 @@ test("新しい転送レコードが作成されないべき", () => {});
 
 ## ⚪ ️2.4 ミドルウェアを単体でテストする
 
-:white_check_mark: **すべきこと:** ミドルウェアテストを避ける人は多いですが、それはシステムの小さな部分であり、ライブのExpressサーバーを必要とするからです。これらの理由はどちらも間違っています —  ミドルウェアは小さいですが、すべてまたはほとんどのリクエストに影響を与え、{req,res} JSオブジェクトを受け取る純関数として簡単にテストできます。ミドルウェア関数をテストするには、それを呼び出し、{req,res}オブジェクトとのやりとりをスパイ（例えば[Sinonを使用して](https://www.npmjs.com/package/sinon)）して、関数が正しいアクションを実行したことを確認するだけでいいのです。[node-mock-http](https://www.npmjs.com/package/node-mocks-http)ライブラリは、{req,res}オブジェクトを因数分解し、それらの振る舞いをスパイすることさらに進みます。例えば、resオブジェクトに設定されたHTTPステータスが期待に合っているかをアサートできます（以下の例を参照）。
+:white_check_mark: **こうしましょう:** ミドルウェアテストを避ける人は多いですが、それはシステムの小さな部分であり、ライブのExpressサーバーを必要とするからです。これらの理由はどちらも間違っています —  ミドルウェアは小さいですが、すべてまたはほとんどのリクエストに影響を与え、{req,res} JSオブジェクトを受け取る純関数として簡単にテストできます。ミドルウェア関数をテストするには、それを呼び出し、{req,res}オブジェクトとのやりとりをスパイ（例えば[Sinonを使用して](https://www.npmjs.com/package/sinon)）して、関数が正しいアクションを実行したことを確認するだけでいいのです。[node-mock-http](https://www.npmjs.com/package/node-mocks-http)ライブラリは、{req,res}オブジェクトを因数分解し、それらの振る舞いをスパイすることさらに進みます。例えば、resオブジェクトに設定されたHTTPステータスが期待に合っているかをアサートできます（以下の例を参照）。
 <br/>
 
 ❌ **さもなくば:** Expressミドルウェアのバグ === すべてまたはほとんどのリクエストのバグ
@@ -879,7 +879,7 @@ test("認証ヘッダーなしのリクエストは、httpステータス403を�
 
 ## ⚪ ️2.5 静的解析ツールを使用して測定しリファクタリング
 
-:white_check_mark: **すべきこと:** 静的解析ツールを使用することで、コードの品質を向上させ、コードを保守可能に保つための客観的な方法が提供されます。静的解析ツールをCIビルドに追加して、コードの悪臭を発見したときにビルドを中止することができます。通常のリンティングに対する主な売りのポイントは、複数のファイルの文脈で品質を検査する能力（例: 重複の検出）、高度な解析の実施（例: コードの複雑さ）そしてコードの問題の履歴と進捗の追跡です。使用できるツールの例として、[SonarQube](https://www.sonarqube.org/)（4,900以上の[stars](https://github.com/SonarSource/sonarqube)）と[Code Climate](https://codeclimate.com/)（2,000以上の[stars](https://github.com/codeclimate/codeclimate)）があります。
+:white_check_mark: **こうしましょう:** 静的解析ツールを使用することで、コードの品質を向上させ、コードを保守可能に保つための客観的な方法が提供されます。静的解析ツールをCIビルドに追加して、コードの悪臭を発見したときにビルドを中止することができます。通常のリンティングに対する主な売りのポイントは、複数のファイルの文脈で品質を検査する能力（例: 重複の検出）、高度な解析の実施（例: コードの複雑さ）そしてコードの問題の履歴と進捗の追跡です。使用できるツールの例として、[SonarQube](https://www.sonarqube.org/)（4,900以上の[stars](https://github.com/SonarSource/sonarqube)）と[Code Climate](https://codeclimate.com/)（2,000以上の[stars](https://github.com/codeclimate/codeclimate)）があります。
 
 クレジット: <a href="https://github.com/TheHollidayInn" data-href="https://github.com/TheHollidayInn" class="markup--anchor markup--p-anchor" rel="noopener nofollow" target="_blank">[Keith Holliday](https://github.com/TheHollidayInn)</a>
 
@@ -905,7 +905,7 @@ test("認証ヘッダーなしのリクエストは、httpステータス403を�
 
 ## ⚪ ️2.6 Node関連のカオスへの準備を確認する
 
-:white_check_mark: **すべきこと:** 奇妙なことに、ほとんどのソフトウェアテストはロジックとデータのみですが、最悪の出来事（そして本当に緩和が難しいもの）はインフラストラクチャの問題です。例えば、プロセスメモリが過負荷になったり、サーバー/プロセスがクラッシュしたり、APIの処理が50％遅くなったときに監視システムが認識するかどうかをテストしたことがありますか？これらの悪影響をテストして緩和するために — [カオスエンジニアリング](https://principlesofchaos.org/)はNetflixによって生み出されました。これは、混乱した問題に対するアプリの回復力をテストするための認識、フレームワーク、ツールを提供することを目的としています。例えば、その有名なツールの一つ、[カオスモンキー](https://github.com/Netflix/chaosmonkey)はサーバーをランダムに停止させることで、サービスがユーザーにサービスを提供し続け、単一のサーバーに依存しないことを確認します（また、Kubernetes版としてポッドを停止する[kube-monkey](https://github.com/asobti/kube-monkey)もあります）。これらのツールはすべてホスティング/プラットフォームレベルで機能しますが、純粋なNodeカオスをテストおよび生成したい場合はどうでしょうか。たとえば、Nodeプロセスが未処理のエラー、未処理のpromise拒否、1.7GBの最大許可メモリでのv8メモリ過負荷にどのように対処するか、またはイベントループが頻繁にブロックされるときにUXが満足な状態であるかどうかを確認する場合などを考慮するために、私は[node-chaos](https://github.com/i0natan/node-chaos-monkey)（アルファ版）を作成しました、これはNode関連のカオス的な行為をすべて提供します。
+:white_check_mark: **こうしましょう:** 奇妙なことに、ほとんどのソフトウェアテストはロジックとデータのみですが、最悪の出来事（そして本当に緩和が難しいもの）はインフラストラクチャの問題です。例えば、プロセスメモリが過負荷になったり、サーバー/プロセスがクラッシュしたり、APIの処理が50％遅くなったときに監視システムが認識するかどうかをテストしたことがありますか？これらの悪影響をテストして緩和するために — [カオスエンジニアリング](https://principlesofchaos.org/)はNetflixによって生み出されました。これは、混乱した問題に対するアプリの回復力をテストするための認識、フレームワーク、ツールを提供することを目的としています。例えば、その有名なツールの一つ、[カオスモンキー](https://github.com/Netflix/chaosmonkey)はサーバーをランダムに停止させることで、サービスがユーザーにサービスを提供し続け、単一のサーバーに依存しないことを確認します（また、Kubernetes版としてポッドを停止する[kube-monkey](https://github.com/asobti/kube-monkey)もあります）。これらのツールはすべてホスティング/プラットフォームレベルで機能しますが、純粋なNodeカオスをテストおよび生成したい場合はどうでしょうか。たとえば、Nodeプロセスが未処理のエラー、未処理のpromise拒否、1.7GBの最大許可メモリでのv8メモリ過負荷にどのように対処するか、またはイベントループが頻繁にブロックされるときにUXが満足な状態であるかどうかを確認する場合などを考慮するために、私は[node-chaos](https://github.com/i0natan/node-chaos-monkey)（アルファ版）を作成しました、これはNode関連のカオス的な行為をすべて提供します。
 <br/>
 
 ❌ **さもなくば:** ここには逃げ場はありません、マーフィーの法則があなたのプロダクションを容赦なく襲撃します
@@ -926,7 +926,7 @@ test("認証ヘッダーなしのリクエストは、httpステータス403を�
 
 ## ⚪ ️2.7 グローバルなテストフィクスチャとシードを避け、テストごとにデータを追加する
 
-:white_check_mark: **すべきこと:** ゴールデンルール（箇条書き0）に従うと、各テストは独自のDB行セットを追加し、それに基づいて動作し、結合を防ぎ、テストフローについて簡単に理由づけできるようにすべきです。現実には、パフォーマンス向上のためにテスト前にDBにデータをシード（いわゆる「テストフィクスチャ」）を行うテスターにより、このルールはしばしば違反されます。確かにパフォーマンスは正当な懸念ですが（「コンポーネントテスト」の箇条書きを参照）、テストの複雑さは他の考慮事項を支配すべき辛い問題です。実践的には、各テストケースが必要なDBレコードを明示的に追加し、それらのレコードのみに基づいて動作します。もしパフォーマンスが重要な懸念となった場合は、データを変化させない一部のテストスイート（例: クエリ）のみをシードするという形でバランスの取れた妥協があるかもしれません。
+:white_check_mark: **こうしましょう:** ゴールデンルール（箇条書き0）に従うと、各テストは独自のDB行セットを追加し、それに基づいて動作し、結合を防ぎ、テストフローについて簡単に理由づけできるようにすべきです。現実には、パフォーマンス向上のためにテスト前にDBにデータをシード（いわゆる「テストフィクスチャ」）を行うテスターにより、このルールはしばしば違反されます。確かにパフォーマンスは正当な懸念ですが（「コンポーネントテスト」の箇条書きを参照）、テストの複雑さは他の考慮事項を支配すべき辛い問題です。実践的には、各テストケースが必要なDBレコードを明示的に追加し、それらのレコードのみに基づいて動作します。もしパフォーマンスが重要な懸念となった場合は、データを変化させない一部のテストスイート（例: クエリ）のみをシードするという形でバランスの取れた妥協があるかもしれません。
 <br/>
 
 ❌ **さもなくば:** いくつかのテストが失敗し、デプロイが中止され、私たちのチームは貴重な時間を費やすことになり、「バグがありますか？」と調査することになり、とても大変です。そして、「あぁ、2つのテストが同じシードデータを変化させていました」と気づくのです。
@@ -979,54 +979,54 @@ it("サイト名を更新すると、成功の確認を得る", async () => {
 
 <br/><br/>
 
-# Section 3️⃣: Frontend Testing
+# Section 3️⃣: フロントエンドテスティング
 
-## ⚪ ️ 3.1 Separate UI from functionality
+## ⚪ ️3.1 UIと機能を分離する
 
-:white_check_mark: **Do:** When focusing on testing component logic, UI details become a noise that should be extracted, so your tests can focus on pure data. Practically, extract the desired data from the markup in an abstract way that is not too coupled to the graphic implementation, assert only on pure data (vs HTML/CSS graphic details) and disable animations that slow down. You might get tempted to avoid rendering and test only the back part of the UI (e.g. services, actions, store) but this will result in fictional tests that don't resemble the reality and won't reveal cases where the right data doesn't even arrive in the UI
-
-<br/>
-
-❌ **Otherwise:** The pure calculated data of your test might be ready in 10ms, but then the whole test will last 500ms (100 tests = 1 min) due to some fancy and irrelevant animation
+:white_check_mark: **こうしましょう:** コンポーネントロジックのテストに集中するときは、UIの詳細がノイズになり得るため取り除くべきです。これにより、テストが純粋なデータに焦点を当てられます。実際には、マークアップからグラフィックの実装にあまり結びつかない抽象的な方法で必要なデータを抽出し、純粋なデータ（HTML/CSSのグラフィック詳細ではなく）のみをアサートし、遅延を引き起こすアニメーションを無効にします。UIの裏側（例: サービス、アクション、ストア）のみをテストしてレンダリングを避けたくなるかもしれませんが、これは現実と似ていない架空のテストとなり、正しいデータがUIに届いていないケースを明らかにしません。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** テストの純粋な計算データは10msで準備ができるかもしれませんが、関係のないアニメーションによって全体のテストが500ms（100のテスト = 1分）になるかもしれません。
 
 <br/>
 
-### :clap: Doing It Right Example: Separating out the UI details
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: UIの詳細を分離
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20React-blue.svg "Examples with React") ![](https://img.shields.io/badge/🔧%20Example%20using%20React%20Testing%20Library-blue.svg "Examples with react-testing-library")
 
 ```javascript
-test("When users-list is flagged to show only VIP, should display only VIP members", () => {
+test("users-listにVIPのみを表示するフラグが設定されている場合、VIPメンバーのみを表示する", () => {
   // Arrange
   const allUsers = [{ id: 1, name: "Yoni Goldberg", vip: false }, { id: 2, name: "John Doe", vip: true }];
 
   // Act
   const { getAllByTestId } = render(<UsersList users={allUsers} showOnlyVIP={true} />);
 
-  // Assert - Extract the data from the UI first
+  // Assert - まずUIからデータを抽出する
   const allRenderedUsers = getAllByTestId("user").map(uiElement => uiElement.textContent);
   const allRealVIPUsers = allUsers.filter(user => user.vip).map(user => user.name);
-  expect(allRenderedUsers).toEqual(allRealVIPUsers); //compare data with data, no UI here
+  expect(allRenderedUsers).toEqual(allRealVIPUsers); // データとデータを比較、UIはここにはない
 });
 ```
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: Assertion mix UI details and data
+### :thumbsdown: アンチパターン例: アサーションがUIの詳細とデータを混合
 
 ```javascript
-test("When flagging to show only VIP, should display only VIP members", () => {
+test("users-listにVIPのみを表示するフラグが設定されている場合、VIPメンバーのみを表示する", () => {
   // Arrange
   const allUsers = [{ id: 1, name: "Yoni Goldberg", vip: false }, { id: 2, name: "John Doe", vip: true }];
 
   // Act
   const { getAllByTestId } = render(<UsersList users={allUsers} showOnlyVIP={true} />);
 
-  // Assert - Mix UI & data in assertion
+  // Assert - アサーションにUIとデータを混在させる
   expect(getAllByTestId("user")).toEqual('[<li data-test-id="user">John Doe</li>]');
 });
 ```
@@ -1035,36 +1035,36 @@ test("When flagging to show only VIP, should display only VIP members", () => {
 
 <br/><br/>
 
-## ⚪ ️ 3.2 Query HTML elements based on attributes that are unlikely to change
+## ⚪ ️3.2 変更する可能性が低い属性に基づいてHTML要素をクエリする
 
-:white_check_mark: **Do:** Query HTML elements based on attributes that are likely to survive graphic changes unlike CSS selectors and like form labels. If the designated element doesn't have such attributes, create a dedicated test attribute like 'test-id-submit-button'. Going this route not only ensures that your functional/logic tests never break because of look & feel changes but also it becomes clear to the entire team that this element and attribute are utilized by tests and shouldn't get removed
-
-<br/>
-
-❌ **Otherwise:** You want to test the login functionality that spans many components, logic and services, everything is set up perfectly - stubs, spies, Ajax calls are isolated. All seems perfect. Then the test fails because the designer changed the div CSS class from 'thick-border' to 'thin-border'
+:white_check_mark: **こうしましょう:** CSSセレクターやフォームラベルのようにグラフィックの変更にも耐える可能性がある属性に基づいてHTML要素をクエリします。指定された要素にそのような属性がない場合、 'test-id-submit-button' のような専用のテスト属性を作成します。この方法だと、機能/ロジックテストは外観の変更によって壊れることがなくなるだけでなく、この要素と属性がテストで使用され、そのため削除されるべきではないことがチーム全体に明確になります。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 多くのコンポーネント、ロジック、サービスにわたるログイン機能をテストしたいとき、準備は完璧 — スタブ、スパイ、Ajaxコールが孤立しています。すべては完璧に見えます。しかしデザイナーがdivのCSSクラスを 'thick-border' から 'thin-border' に変更したためにテストが失敗します。
 
 <br/>
 
-### :clap: Doing It Right Example: Querying an element using a dedicated attribute for testing
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しいやり方の例: テスト用に専用の属性を使用して要素をクエリ
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20React-blue.svg "Examples with React")
 
 ```html
-// the markup code (part of React component)
+// マークアップコード（Reactコンポーネントの一部）
 <h3>
   <Badge pill className="fixed_badge" variant="dark">
     <span data-test-id="errorsLabel">{value}</span>
-    <!-- note the attribute data-test-id -->
+    <!-- 属性 data-test-id に注目 -->
   </Badge>
 </h3>
 ```
 
 ```javascript
-// this example is using react-testing-library
+// この例はreact-testing-libraryを使用しています
 test("Whenever no data is passed to metric, show 0 as default", () => {
   // Arrange
   const metricValue = undefined;
@@ -1078,16 +1078,16 @@ test("Whenever no data is passed to metric, show 0 as default", () => {
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: Relying on CSS attributes
+## :thumbsdown: アンチパターン例: CSS属性に依存する
 
 ```html
-<!-- the markup code (part of React component) -->
+<!-- マークアップコード（Reactコンポーネントの一部） -->
 <span id="metric" className="d-flex-column">{value}</span>
-<!-- what if the designer changes the classs? -->
+<!-- デザイナーがクラスを変更したらどうしますか？ -->
 ```
 
 ```javascript
-// this exammple is using enzyme
+// この例はenzymeを使用しています
 test("Whenever no data is passed, error metric shows zero", () => {
   // ...
 
@@ -1099,23 +1099,23 @@ test("Whenever no data is passed, error metric shows zero", () => {
 
 <br/>
 
-## ⚪ ️ 3.3 Whenever possible, test with a realistic and fully rendered component
+## ⚪ ️3.3 可能な限り、リアルで完全にレンダリングされたコンポーネントでテストする
 
-:white_check_mark: **Do:** Whenever reasonably sized, test your component from outside like your users do, fully render the UI, act on it and assert that the rendered UI behaves as expected. Avoid all sort of mocking, partial and shallow rendering - this approach might result in untrapped bugs due to lack of details and harden the maintenance as the tests mess with the internals (see bullet ['Favour blackbox testing'](https://github.com/goldbergyoni/javascript-testing-best-practices#-%EF%B8%8F-14-stick-to-black-box-testing-test-only-public-methods)). If one of the child components is significantly slowing down (e.g. animation) or complicating the setup - consider explicitly replacing it with a fake
+:white_check_mark: **こうしましょう:** サイズが適切である限り、ユーザーが行うようにコンポーネントを外からテストし、UIを完全にレンダリングし、それに対して操作を行い、レンダリングされたUIが期待通りに動作することをアサートします。すべての種類のモック、部分的および浅いレンダリングを避けます — このアプローチは、詳細の欠如によるバグの見落としや、テストが内部に干渉するためメンテナンスを難しくする可能性があります（「ブラックボックステストを好む」を参照）。もし子コンポーネントの一つが著しく動作を遅くしたり（例: アニメーション）、セットアップを複雑にしたりする場合は、明示的に偽のものに置き換えることを検討してください。
 
-With all that said, a word of caution is in order: this technique works for small/medium components that pack a reasonable size of child components. Fully rendering a component with too many children will make it hard to reason about test failures (root cause analysis) and might get too slow. In such cases, write only a few tests against that fat parent component and more tests against its children
-
-<br/>
-
-❌ **Otherwise:** When poking into a component's internal by invoking its private methods, and checking the inner state - you would have to refactor all tests when refactoring the components implementation. Do you really have a capacity for this level of maintenance?
+それに加えて、注意を要する言葉の一つがあります：この技術は、適切なサイズの子コンポーネントをパックしている小規模/中規模のコンポーネントに対して機能します。あまりに多くの子を持つコンポーネントを完全にレンダリングすることは、テストの失敗（根本原因の分析）についての説明を困難にしすぎることがあり、あまりにも遅くなる可能性があります。そのような場合、その大きな親コンポーネントに対してはいくつかのテストを行い、その子に対しては多くのテストを行います。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** コンポーネントのプライベートメソッドを呼び出し、その内部状態をチェックすることによって、コンポーネントの内部をつつくとき、コンポーネントの実装をリファクタリングするときにすべてのテストをリファクタリングする必要があります。このレベルのメンテナンスを行う能力がありますか？
 
 <br/>
 
-### :clap: Doing It Right Example: Working realistically with a fully rendered component
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: 完全にレンダリングされたコンポーネントをリアルに扱う
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20React-blue.svg "Examples with React") ![](https://img.shields.io/badge/🔧%20Example%20using%20Enzyme-blue.svg "Examples with Enzyme")
 
@@ -1133,8 +1133,8 @@ class Calendar extends React.Component {
   }
 }
 
-//Examples use React & Enzyme
-test("Realistic approach: When clicked to show filters, filters are displayed", () => {
+// 例はReact & Enzymeを使用
+test("リアルなアプローチ: フィルターを表示するためにクリックすると、フィルターが表示される", () => {
   // Arrange
   const wrapper = mount(<Calendar showFilters={false} />);
 
@@ -1143,14 +1143,14 @@ test("Realistic approach: When clicked to show filters, filters are displayed", 
 
   // Assert
   expect(wrapper.text().includes("Choose Filter"));
-  // This is how the user will approach this element: by text
+  // ユーザーはこの要素に次のようにアプローチする: by text
 });
 ```
 
-### :thumbsdown: Anti-Pattern Example: Mocking the reality with shallow rendering
+### :thumbsdown: アンチパターン例: 浅いレンダリングでモックする
 
 ```javascript
-test("Shallow/mocked approach: When clicked to show filters, filters are displayed", () => {
+test("浅い/モックされたアプローチ: フィルターを表示するためにクリックすると、フィルターが表示される", () => {
   // Arrange
   const wrapper = shallow(<Calendar showFilters={false} title="Choose Filter" />);
 
@@ -1159,11 +1159,11 @@ test("Shallow/mocked approach: When clicked to show filters, filters are display
     .find("filtersPanel")
     .instance()
     .showFilters();
-  // Tap into the internals, bypass the UI and invoke a method. White-box approach
+  // 内部に直接アクセスし、UIをスキップし、メソッドを呼び出します。ホワイトボックスアプローチ
 
   // Assert
   expect(wrapper.find("Filter").props()).toEqual({ title: "Choose Filter" });
-  // what if we change the prop name or don't pass anything relevant?
+  // もしプロップ名を変更したり、関連するものを何も渡さなかったらどうなりますか？
 });
 ```
 
@@ -1171,55 +1171,55 @@ test("Shallow/mocked approach: When clicked to show filters, filters are display
 
 <br/>
 
-## ⚪ ️ 3.4 Don't sleep, use frameworks built-in support for async events. Also try to speed things up
+## ⚪ ️3.4 スリープせず、フレームワークの組み込みサポートを使って非同期イベントを処理し、可能な限り高速化する
 
-:white_check_mark: **Do:** In many cases, the unit under test completion time is just unknown (e.g. animation suspends element appearance) - in that case, avoid sleeping (e.g. setTimeOut) and prefer more deterministic methods that most platforms provide. Some libraries allows awaiting on operations (e.g. [Cypress cy.request('url')](https://docs.cypress.io/guides/references/best-practices.html#Unnecessary-Waiting)), other provide API for waiting like [@testing-library/dom method wait(expect(element))](https://testing-library.com/docs/guide-disappearance). Sometimes a more elegant way is to stub the slow resource, like API for example, and then once the response moment becomes deterministic the component can be explicitly re-rendered. When depending upon some external component that sleeps, it might turn useful to [hurry-up the clock](https://jestjs.io/docs/en/timer-mocks). Sleeping is a pattern to avoid because it forces your test to be slow or risky (when waiting for a too short period). Whenever sleeping and polling is inevitable and there's no support from the testing framework, some npm libraries like [wait-for-expect](https://www.npmjs.com/package/wait-for-expect) can help with a semi-deterministic solution
+:white_check_mark: **こうしましょう:** テスト対象のユニットの完了時間が不明である場合が多くあります（例: アニメーションが要素の出現を遅延させる）。その場合、スリープ（例: setTimeOut）を避け、ほとんどのプラットフォームが提供するより決定論的なメソッドを利用します。一部のライブラリでは操作を待つことが許可されています（例: [Cypress cy.request('url')](https://docs.cypress.io/guides/references/best-practices.html#Unnecessary-Waiting)）。他は[@testing-library/dom メソッド wait(expect(element))](https://testing-library.com/docs/guide-disappearance)のように待機用のAPIを提供しています。よりエレガントな方法としては、APIのような遅いリソースをスタブ化し、レスポンスのタイミングが決定論的になったときにコンポーネントを明示的に再レンダリングすることもあります。外部コンポーネントがスリープする場合、[時計を急がせる](https://jestjs.io/docs/en/timer-mocks)ことが有用な場合もあります。スリープはテストを遅くしたり（短い時間を待つときの場合）危険にしたりするため避けるべきパターンです。スリープやポーリングが避けられず、テストフレームワークのサポートがない場合は、[wait-for-expect](https://www.npmjs.com/package/wait-for-expect)のようなnpmライブラリが半決定論的な解決策を提供するのに役立つことがあります。
 <br/>
 
-❌ **Otherwise:** When sleeping for a long time, tests will be an order of magnitude slower. When trying to sleep for small numbers, test will fail when the unit under test didn't respond in a timely fashion. So it boils down to a trade-off between flakiness and bad performance
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 長時間スリープする場合、テストは桁違いに遅くなります。小さな数でスリープしようとすると、テスト対象のユニットがタイムリーに反応しなかった場合にテストが失敗します。つまり、フレーク性と悪いパフォーマンス間のトレードオフに帰結します。
 
 <br/>
 
-### :clap: Doing It Right Example: E2E API that resolves only when the async operations is done (Cypress)
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: 非同期操作が完了するときにのみ解決するE2E API (Cypress)
 
 ![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Using Cypress to illustrate the idea")
 ![](https://img.shields.io/badge/🔧%20Example%20using%20React%20Testing%20Library-blue.svg "Examples with react-testing-library")
 
 ```javascript
-// using Cypress
-cy.get("#show-products").click(); // navigate
-cy.wait("@products"); // wait for route to appear
-// this line will get executed only when the route is ready
+// Cypressを使用
+cy.get("#show-products").click(); // ナビゲート
+cy.wait("@products"); // ルートが表示されるのを待つ
+// この行はルートが準備完了のときにのみ実行されます
 ```
 
-### :clap: Doing It Right Example: Testing library that waits for DOM elements
+### :clap: 正しい例: DOM要素を待機するテストライブラリ
 
 ```javascript
 // @testing-library/dom
-test("movie title appears", async () => {
-  // element is initially not present...
+test("映画タイトルが表示される", async () => {
+  // 要素は初期状態では存在しない...
 
-  // wait for appearance
+  // 表示を待つ
   await wait(() => {
     expect(getByText("the lion king")).toBeInTheDocument();
   });
 
-  // wait for appearance and return the element
+  //表示を待って要素を返す
   const movie = await waitForElement(() => getByText("the lion king"));
 });
 ```
 
-### :thumbsdown: Anti-Pattern Example: custom sleep code
+### :thumbsdown: アンチパターン例: 独自のスリープコード
 
 ```javascript
-test("movie title appears", async () => {
-  // element is initially not present...
+test("映画タイトルが表示される", async () => {
+  // 要素は初期状態では存在しない...
 
-  // custom wait logic (caution: simplistic, no timeout)
+  // 独自の待機ロジック（注意: 単純すぎ、タイムアウトなし）
   const interval = setInterval(() => {
     const found = getByText("the lion king");
     if (found) {
@@ -1228,7 +1228,7 @@ test("movie title appears", async () => {
     }
   }, 100);
 
-  // wait for appearance and return the element
+  // 出現を待って要素を返す
   const movie = await waitForElement(() => getByText("the lion king"));
 });
 ```
@@ -1237,21 +1237,21 @@ test("movie title appears", async () => {
 
 <br/>
 
-## ⚪ ️ 3.5 Watch how the content is served over the network
+## ⚪ ️3.5 コンテンツがネットワークを介してどのように配信されるかを観察する
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Google%20LightHouse-blue.svg "Examples with Lighthouse")
 
-✅ **Do:** Apply some active monitor that ensures the page load under real network is optimized - this includes any UX concern like slow page load or un-minified bundle. The inspection tools market is no short: basic tools like [pingdom](https://www.pingdom.com/), AWS CloudWatch, [gcp StackDriver](https://cloud.google.com/monitoring/uptime-checks/) can be easily configured to watch whether the server is alive and response under a reasonable SLA. This only scratches the surface of what might get wrong, hence it's preferable to opt for tools that specialize in frontend (e.g. [lighthouse](https://developers.google.com/web/tools/lighthouse/), [pagespeed](https://developers.google.com/speed/pagespeed/insights/)) and perform richer analysis. The focus should be on symptoms, metrics that directly affect the UX, like page load time, [meaningful paint](https://scotch.io/courses/10-web-performance-audit-tips-for-your-next-billion-users-in-2018/fmp-first-meaningful-paint), [time until the page gets interactive (TTI)](https://calibreapp.com/blog/time-to-interactive/). On top of that, one may also watch for technical causes like ensuring the content is compressed, time to the first byte, optimize images, ensuring reasonable DOM size, SSL and many others. It's advisable to have these rich monitors both during development, as part of the CI and most important - 24x7 over the production's servers/CDN
+✅ **こうしましょう:** 実際のネットワーク下でのページロードが最適化されていることを保証するアクティブモニターを適用します。これには、ページロードが遅かったりミニファイされていないバンドルなど、UXに関する懸念が含まれます。インスペクションツールの市場は豊富で、[pingdom](https://www.pingdom.com/)やAWS CloudWatch、[gcp StackDriver](https://cloud.google.com/monitoring/uptime-checks/)などの基本的なツールは、サーバーが存続し、合理的なSLAの下で応答するかどうかを監視するために簡単に設定できます。これだけでは間違いが発生する可能性がある多くの状況を網羅できないため、フロントエンドに特化し、よりリッチな分析を行うツールを選ぶことが望ましいです（例: [lighthouse](https://developers.google.com/web/tools/lighthouse/)、[pagespeed](https://developers.google.com/speed/pagespeed/insights/)）。焦点はUXに直接影響を与える症状や指標、例えばページロード時間、[意味のあるペイント](https://scotch.io/courses/10-web-performance-audit-tips-for-your-next-billion-users-in-2018/fmp-first-meaningful-paint)、[ページの対話可能になるまでの時間(TTI)](https://calibreapp.com/blog/time-to-interactive/)などに置くべきです。加えて、コンテンツが圧縮されているか、最初のバイトまでの時間、画像の最適化、合理的なDOMサイズの確保、SSLなどの技術的な原因を監視することも重要です。これらのリッチなモニターを開発中、CIの一部として、そして最も重要なのは、プロダクションのサーバー/CDNを24時間365日監視することが推奨されます。
 
 <br/>
 
-❌ **Otherwise:** It must be disappointing to realize that after such great care for crafting a UI, 100% functional tests passing and sophisticated bundling - the UX is horrible and slow due to CDN misconfiguration
+❌ **さもなくば:** UIの制作に多大な注意を払い、100%の機能テストが合格し、洗練されたバンドルを行ったにもかかわらず、CDNの誤設定によりUXがひどく遅いと気付くのは失望です。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+<details><summary>✏ <b>コード例</b></summary>
 
-### :clap: Doing It Right Example: Lighthouse page load inspection report
+### :clap: 正しい例: Lighthouseページロード検査レポート
 
 ![](/assets/lighthouse2.png "Lighthouse page load inspection report")
 
@@ -1259,26 +1259,26 @@ test("movie title appears", async () => {
 
 <br/>
 
-## ⚪ ️ 3.6 Stub flaky and slow resources like backend APIs
+## ⚪ ️3.6 バックエンドAPIのような不安定で遅いリソースをスタブ化する
 
-:white_check_mark: **Do:** When coding your mainstream tests (not E2E tests), avoid involving any resource that is beyond your responsibility and control like backend API and use stubs instead (i.e. test double). Practically, instead of real network calls to APIs, use some test double library (like [Sinon](https://sinonjs.org/), [Test doubles](https://www.npmjs.com/package/testdouble), etc) for stubbing the API response. The main benefit is preventing flakiness - testing or staging APIs by definition are not highly stable and from time to time will fail your tests although YOUR component behaves just fine (production env was not meant for testing and it usually throttles requests). Doing this will allow simulating various API behavior that should drive your component behavior as when no data was found or the case when API throws an error. Last but not least, network calls will greatly slow down the tests
-
-<br/>
-
-❌ **Otherwise:** The average test runs no longer than few ms, a typical API call last 100ms>, this makes each test ~20x slower
+:white_check_mark: **こうしましょう:** メインストリームのテスト（E2Eテストではない）をコーディングする際には、バックエンドAPIのように責任と制御を超えたリソースを関与させるのは避け、代わりにスタブ（つまりテストダブル）を使用します。実際には、APIへの実際のネットワーク呼び出しの代わりに、[Sinon](https://sinonjs.org/)や[Test doubles](https://www.npmjs.com/package/testdouble)のようなテストダブルライブラリを使ってAPIのレスポンスをスタブ化します。主な利点はフレーク性を防ぐことです。テストやステージングAPIは高い安定性がないため、時々、コンポーネントがしっかり動作しているにもかかわらず、テストが失敗することがあります（プロダクション環境はテスト目的で設計されておらず、通常リクエストを制限しています）。これを行うことで、データが見つからなかった場合やAPIがエラーを投げた場合のような、コンポーネントの動作を駆動するべき様々なAPIの動作をシミュレートできます。加えて、ネットワーク呼び出しはテストを大幅に遅くします。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 平均的なテストは数ミリ秒以内に終了しますが、典型的なAPI呼び出しは100ms以上です。これにより、各テストは約20倍遅くなります。
 
 <br/>
 
-### :clap: Doing It Right Example: Stubbing or intercepting API calls
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: API呼び出しのスタブまたはインターセプト
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20React-blue.svg "Examples with React") ![](https://img.shields.io/badge/🔧%20Example%20using%20React%20Testing%20Library-blue.svg "Examples with react-testing-library")
 
 ```javascript
-// unit under test
+// テスト対象のユニット
 export default function ProductsList() {
   const [products, setProducts] = useState(false);
 
@@ -1294,8 +1294,8 @@ export default function ProductsList() {
   return products ? <div>{products}</div> : <div data-test-id="no-products-message">No products</div>;
 }
 
-// test
-test("When no products exist, show the appropriate message", () => {
+// テスト
+test("商品が存在しない場合、適切なメッセージを表示する", () => {
   // Arrange
   nock("api")
     .get(`/products`)
@@ -1313,38 +1313,38 @@ test("When no products exist, show the appropriate message", () => {
 
 <br/>
 
-## ⚪ ️ 3.7 Have very few end-to-end tests that spans the whole system
+## ⚪ ️3.7 システム全体に及ぶエンドツーエンドテストはごく少数にする
 
-:white_check_mark: **Do:** Although E2E (end-to-end) usually means UI-only testing with a real browser (See [bullet 3.6](https://github.com/goldbergyoni/javascript-testing-best-practices#-%EF%B8%8F-36-stub-flaky-and-slow-resources-like-backend-apis)), for other they mean tests that stretch the entire system including the real backend. The latter type of tests is highly valuable as they cover integration bugs between frontend and backend that might happen due to a wrong understanding of the exchange schema. They are also an efficient method to discover backend-to-backend integration issues (e.g. Microservice A sends the wrong message to Microservice B) and even to detect deployment failures - there are no backend frameworks for E2E testing that are as friendly and mature as UI frameworks like [Cypress](https://www.cypress.io/) and [Puppeteer](https://github.com/GoogleChrome/puppeteer). The downside of such tests is the high cost of configuring an environment with so many components, and mostly their brittleness - given 50 microservices, even if one fails then the entire E2E just failed. For that reason, we should use this technique sparingly and probably have 1-10 of those and no more. That said, even a small number of E2E tests are likely to catch the type of issues they are targeted for - deployment & integration faults. It's advisable to run those over a production-like staging environment
-
-<br/>
-
-❌ **Otherwise:** UI might invest much in testing its functionality only to realizes very late that the backend returned payload (the data schema the UI has to work with) is very different than expected
+:white_check_mark: **こうしましょう:** エンドツーエンド（E2E）は通常、実際のブラウザを使ったUIのみのテストを意味しますが（3.6を参照）、他の人々にとっては実際のバックエンドを含むシステム全体に及ぶテストを意味します。後者のタイプのテストは非常に価値があり、フロントエンドとバックエンドの統合バグをカバーしているため、データスキーマの誤解によって起こる可能性のある問題を防ぎます。また、バックエンド間の統合問題を発見する効率的な方法であり（例: マイクロサービスAがマイクロサービスBに誤ったメッセージを送信する）、デプロイメントの失敗を検出するためにも利用できます。UIフレームワークの[Cypress](https://www.cypress.io/)や[Puppeteer](https://github.com/GoogleChrome/puppeteer)のように、バックエンドのE2Eテストのための親しみやすく成熟したフレームワークは存在しません。このようなテストの欠点は、多くのコンポーネントを持つ環境の構成に高コストがかかること、そして多くの場合その脆さです。50のマイクロサービスのうち1つでも失敗すれば、E2E全体が失敗してしまいます。そのため、この手法は控えめに使用し、1〜10種類程度に留めるべきです。それでも、少数のE2Eテストであっても、デプロイメントと統合の不具合を検出する能力は高いです。プロダクションに近いステージング環境でこれらを実行することが推奨されます。
 
 <br/>
 
-## ⚪ ️ 3.8 Speed-up E2E tests by reusing login credentials
-
-:white_check_mark: **Do:** In E2E tests that involve a real backend and rely on a valid user token for API calls, it doesn't payoff to isolate the test to a level where a user is created and logged-in in every request. Instead, login only once before the tests execution start (i.e. before-all hook), save the token in some local storage and reuse it across requests. This seem to violate one of the core testing principle - keep the test autonomous without resources coupling. While this is a valid worry, in E2E tests performance is a key concern and creating 1-3 API requests before starting each individual tests might lead to horrible execution time. Reusing credentials doesn't mean the tests have to act on the same user records - if relying on user records (e.g. test user payments history) than make sure to generate those records as part of the test and avoid sharing their existence with other tests. Also remember that the backend can be faked - if your tests are focused on the frontend it might be better to isolate it and stub the backend API (see [bullet 3.6](https://github.com/goldbergyoni/javascript-testing-best-practices#-%EF%B8%8F-36-stub-flaky-and-slow-resources-like-backend-apis)).
+❌ **さもなくば:** UIが自機能のテストに多大な投資をしても、バックエンドが返したペイロード（UIが扱うべきデータスキーマ）が期待とは大きく異なることに気付くのが非常に遅れるかもしれません。
 
 <br/>
 
-❌ **Otherwise:** Given 200 test cases and assuming login=100ms = 20 seconds only for logging-in again and again
+## ⚪ ️3.8 ログイン認証情報を再利用してE2Eテストを高速化する
+
+:white_check_mark: **こうしましょう:** 実際のバックエンドを含むE2Eテストで、API呼び出しに有効なユーザートークンが必要な場合、毎回ユーザーを作成してログインさせるようなレベルまでテストを分離するのは得策ではありません。代わりに、テスト実行開始前に一度だけログインし（before-allフックで）、トークンをローカルストレージに保存し、リクエスト間で再利用します。これはテストの基本原則の1つ、リソースの結合なしにテストを自律的に保つというものを違反しているように見えますが、E2Eテストでは性能が重要であり、個々のテストを開始する前に1〜3のAPIリクエストを生成することは、実行時間に大きな悪影響を与えるかもしれません。資格情報を再利用することは、テストが同じユーザーレコードで動作することを意味しません。ユーザーレコードに依存する（例: ユーザーの支払い履歴をテスト）場合は、それらのレコードをテストの一部として生成し、他のテストと共有しないようにしてください。また、バックエンドが偽装できることを忘れないでください。テストがフロントエンドに集中している場合は、それを分離してバックエンドAPIのスタブ化を検討する方が良い場合もあります（[3.6節](https://github.com/goldbergyoni/javascript-testing-best-practices#-%EF%B8%8F-36-stub-flaky-and-slow-resources-like-backend-apis)を参照）。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 200のテストケースがあり、ログインに100msかかると仮定すると、ログインを繰り返すだけで合計20秒かかります。
 
 <br/>
 
-### :clap: Doing It Right Example: Logging-in before-all and not before-each
+<details><summary>✏ <b>コード例</b></summary>
 
-![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Using Cypress to illustrate the idea")
+<br/>
+
+### :clap: 正しい例: before-allでログインし、before-eachではしない
+
+![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Cypressを使ってアイデアを説明")
 
 ```javascript
 let authenticationToken;
 
-// happens before ALL tests run
+// すべてのテストが実行される前に行われる
 before(() => {
   cy.request('POST', 'http://localhost:3000/login', {
     username: Cypress.env('username'),
@@ -1356,7 +1356,7 @@ before(() => {
   })
 })
 
-// happens before EACH test
+// 各テストが実行される前に行われる
 beforeEach(setUser => () {
   cy.visit('/home', {
     onBeforeLoad (win) {
@@ -1371,28 +1371,27 @@ beforeEach(setUser => () {
 
 <br/>
 
-## ⚪ ️ 3.9 Have one E2E smoke test that just travels across the site map
+## ⚪ ️3.9 サイトマップを巡回するだけのE2Eスモークテストを一つ持つ
 
-:white_check_mark: **Do:** For production monitoring and development-time sanity check, run a single E2E test that visits all/most of the site pages and ensures no one breaks. This type of test brings a great return on investment as it's very easy to write and maintain, but it can detect any kind of failure including functional, network and deployment issues. Other styles of smoke and sanity checking are not as reliable and exhaustive - some ops teams just ping the home page (production) or developers who run many integration tests which don't discover packaging and browser issues. Goes without saying that the smoke test doesn't replace functional tests rather just aim to serve as a quick smoke detector
-
-<br/>
-
-❌ **Otherwise:** Everything might seem perfect, all tests pass, production health-check is also positive but the Payment component had some packaging issue and only the /Payment route is not rendering
+:white_check_mark: **こうしましょう:** 本番モニタリングや開発時の正常性チェックのために、すべてのページ、または大部分のサイトページを訪れ、何も壊れていないことを確認する単一のE2Eテストを実行します。このタイプのテストは、執筆と保守が非常に簡単でありながら、機能的、ネットワーク的、およびデプロイメントの問題を含むあらゆる種類の障害を検出できるため、非常に高い投資対効果をもたらします。他のスモークおよび正常性チェックのスタイルは信頼性や網羅性が劣ります。オペレーションチームの一部はホームページだけをpingする（本番環境）、または多くの統合テストを実行する開発者は、パッケージングやブラウザの問題を発見しないことがあります。もちろん、スモークテストは機能テストの代替ではなく、単に素早い問題検出を目指すものです。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** すべてが完璧に見えるかもしれません、すべてのテストが通過し、本番のヘルスチェックも良好ですが、Paymentコンポーネントにはパッケージングの問題があり、/Paymentルートだけがレンダリングされない状況があります。
 
 <br/>
 
-### :clap: Doing It Right Example: Smoke travelling across all pages
+<details><summary>✏ <b>コード例</b></summary>
 
-![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Using Cypress to illustrate the idea")
+<br/>
+
+### :clap: 正しい例: すべてのページを巡るスモークテスト
+
+![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Cypressを使ってアイデアを説明")
 
 ```javascript
-it("When doing smoke testing over all page, should load them all successfully", () => {
-  // exemplified using Cypress but can be implemented easily
-  // using any E2E suite
+it("全ページでスモークテストを行うとき、すべて正常にロードされるべきである", () => {
+  // Cypressを使って示していますが、任意のE2Eスイートで簡単に実装できます
   cy.visit("https://mysite.com/home");
   cy.contains("Home");
   cy.contains("https://mysite.com/Login");
@@ -1406,24 +1405,24 @@ it("When doing smoke testing over all page, should load them all successfully", 
 
 <br/>
 
-## ⚪ ️ 3.10 Expose the tests as a live collaborative document
+## ⚪ ️3.10 テストをライブ共同作業ドキュメントとして公開する
 
-:white_check_mark: **Do:** Besides increasing app reliability, tests bring another attractive opportunity to the table - serve as live app documentation. Since tests inherently speak at a less-technical and product/UX language, using the right tools they can serve as a communication artifact that greatly aligns all the peers - developers and their customers. For example, some frameworks allow expressing the flow and expectations (i.e. tests plan) using a human-readable language so any stakeholder, including product managers, can read, approve and collaborate on the tests which just became the live requirements document. This technique is also being referred to as 'acceptance test' as it allows the customer to define his acceptance criteria in plain language. This is [BDD (behavior-driven testing)](https://en.wikipedia.org/wiki/Behavior-driven_development) at its purest form. One of the popular frameworks that enable this is [Cucumber which has a JavaScript flavor](https://github.com/cucumber/cucumber-js), see example below. Another similar yet different opportunity, [StoryBook](https://storybook.js.org/), allows exposing UI components as a graphic catalog where one can walk through the various states of each component (e.g. render a grid w/o filters, render that grid with multiple rows or with none, etc), see how it looks like, and how to trigger that state - this can appeal also to product folks but mostly serves as live doc for developers who consume those components.
+:white_check_mark: **こうしましょう:** アプリの信頼性を向上させるだけでなく、テストはもう1つの魅力的な機会を提供します。それは、ライブのアプリドキュメントとして機能することです。テストは本質的に、技術的でなく製品/UXの言語で表現されるため、適切なツールを使用することで、開発者と顧客すべての仲間を大きく一致させるコミュニケーションアーティファクトとして役立つことができます。例えば、いくつかのフレームワークでは、人間が読みやすい言語を使ってフローと期待値（つまりテスト計画）を表現でき、製品管理者を含むあらゆるステークホルダーがテストを読み、承認し、協力できるので、テストはライブの要件ドキュメントになります。この手法は「受入テスト」とも呼ばれ、顧客が平易な言葉で受け入れ基準を定義できるようにします。これは[BDD（振る舞い駆動開発）](https://en.wikipedia.org/wiki/Behavior-driven_development)の最も純粋な形です。これを可能にする人気のフレームワークの1つが[Cucumber（JavaScript用のバージョンあり）](https://github.com/cucumber/cucumber-js)です。以下の例をご覧ください。もう1つの関連した機会として、[StoryBook](https://storybook.js.org/)は、UIコンポーネントをグラフィックカタログとして公開し、それぞれのコンポーネントの様々な状態をたどりながら、その見た目やその状態をトリガーする方法を提示することができます。これにより、製品の担当者にもアピールすることができ、主にそのコンポーネントを消費する開発者のためのライブドキュメントとして役立ちます。
 
-❌ **Otherwise:** After investing top resources on testing, it's just a pity not to leverage this investment and win great value
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** テストにトップリソースを投資した後、この投資を活用して大きな価値を得られないのは、ただの悲劇です。
 
 <br/>
 
-### :clap: Doing It Right Example: Describing tests in human-language using cucumber-js
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: cucumber-jsを用いて人間の言葉でテストを記述する
 
 ![](https://img.shields.io/badge/🔨%20Example%20using%20Cucumber-blue.svg "Examples using Cucumber")
 
 ```javascript
-// this is how one can describe tests using cucumber: plain language that allows anyone to understand and collaborate
+// collaborateを使ったテストは、このように説明することができる。
 
 Feature: Twitter new tweet
 
@@ -1439,7 +1438,7 @@ Feature: Twitter new tweet
 
 ```
 
-### :clap: Doing It Right Example: Visualizing our components, their various states and inputs using Storybook
+### :clap: 正しい例: Storybookを使用してコンポーネント、その様々な状態と入力を視覚化する
 
 ![](https://img.shields.io/badge/🔨%20Example%20using%20StoryBook-blue.svg "Using StoryBook")
 
@@ -1449,58 +1448,57 @@ Feature: Twitter new tweet
 
 <br/><br/>
 
-## ⚪ ️ 3.11 Detect visual issues with automated tools
+## ⚪ ️3.11 自動化ツールで視覚的な問題を検出する
 
-:white_check_mark: **Do:** Setup automated tools to capture UI screenshots when changes are presented and detect visual issues like content overlapping or breaking. This ensures that not only the right data is prepared but also the user can conveniently see it. This technique is not widely adopted, our testing mindset leans toward functional tests but it's the visuals what the user experience and with so many device types it's very easy to overlook some nasty UI bug. Some free tools can provide the basics - generate and save screenshots for the inspection of human eyes. While this approach might be sufficient for small apps, it's flawed as any other manual testing that demands human labor anytime something changes. On the other hand, it's quite challenging to detect UI issues automatically due to the lack of clear definition - this is where the field of 'Visual Regression' chime in and solve this puzzle by comparing old UI with the latest changes and detect differences. Some OSS/free tools can provide some of this functionality (e.g. [wraith](https://github.com/BBC-News/wraith), [PhantomCSS](<[https://github.com/HuddleEng/PhantomCSS](https://github.com/HuddleEng/PhantomCSS)>) but might charge significant setup time. The commercial line of tools (e.g. [Applitools](https://applitools.com/), [Percy.io](https://percy.io/)) takes is a step further by smoothing the installation and packing advanced features like management UI, alerting, smart capturing by eliminating 'visual noise' (e.g. ads, animations) and even root cause analysis of the DOM/CSS changes that led to the issue
-
-<br/>
-
-❌ **Otherwise:** How good is a content page that display great content (100% tests passed), loads instantly but half of the content area is hidden?
+:white_check_mark: **こうしましょう:** 変更がある場合にUIのスクリーンショットをキャプチャし、コンテンツの重なりや崩れといった視覚的な問題を検出するための自動化ツールをセットアップしましょう。これにより、正しいデータが用意されるだけでなく、ユーザーがそれを便利に見ることができるようになります。この手法は広く採用されているわけではありませんが、私たちのテストの思考法は機能テストに傾いているのに対し、視覚的な要素がユーザー体験であり、様々なデバイスタイプの存在によりいくつかの厄介なUIバグを見過ごすのは非常に簡単です。無料のツールでも基本を提供できます。つまり、人間の目による検査のためにスクリーンショットを生成・保存するということです。このアプローチは小規模なアプリには十分かもしれませんが、人間の労力を要求するあらゆる手動テストと同様に欠点があります。一方で、UIの問題を自動的に検出するのは非常に難しいため、この分野では'Visual Regression'が登場します。これは、古いUIと最新の変更を比較して違いを検出することでこのパズルを解決します。いくつかのOSS/無料ツールが基本的な機能を提供することができます（例: [wraith](https://github.com/BBC-News/wraith), [PhantomCSS](https://github.com/HuddleEng/PhantomCSS)）が、セットアップにかなりの時間がかかるかもしれません。商用のツール（例: [Applitools](https://applitools.com/), [Percy.io](https://percy.io/)）はさらに一歩進んで、インストールをスムーズにし、管理UI、アラート、'視覚的ノイズ'（例: 広告、アニメーション）を排除するスマートキャプチャー、問題を引き起こしたDOM/CSSの変更の根本原因分析といった高度な機能を搭載しています。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 素晴らしいコンテンツを表示し（100%のテストが合格）、瞬時にロードされるが、コンテンツエリアの半分が隠れているコンテンツページはどれほど良いでしょうか？
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: A typical visual regression - right content that is served badly
-
-![alt text](assets/amazon-visual-regression.jpeg "Amazon page breaks")
+<details><summary>✏ <b>コード例</b></summary>
 
 <br/>
 
-### :clap: Doing It Right Example: Configuring wraith to capture and compare UI snapshots
+### :thumbsdown: アンチパターン例: 提供され方が悪い典型的な視覚的回帰
+
+![alt text](assets/amazon-visual-regression.jpeg "Amazonページの崩れ")
+
+<br/>
+
+### :clap: 正しい例: wraithを設定してUIスナップショットをキャプチャし比較する
 
 ![](https://img.shields.io/badge/🔨%20Example%20using%20Wraith-blue.svg "Using Wraith")
 
 ```
-​# Add as many domains as necessary. Key will act as a label​
+​# 必要なだけドメインを追加します。キーがラベルとして機能します​
 
 domains:
   english: "http://www.mysite.com"​
 
-​# Type screen widths below, here are a couple of examples​
+​# 以下にスクリーンの幅を入力します。いくつかの例を示します​
 
 screen_widths:
-
   - 600​
   - 768​
   - 1024​
   - 1280​
 
-​# Type page URL paths below, here are a couple of examples​
+​# 以下にページのURLパスを入力します。いくつかの例を示します​
 paths:
   about:
     path: /about
     selector: '.about'​
   subscribe:
-      selector: '.subscribe'​
     path: /subscribe
+    selector: '.subscribe'​
 ```
 
-### :clap: Doing It Right Example: Using Applitools to get snapshot comparison and other advanced features
+### :clap: 正しい例: Applitoolsを使用してスナップショットの比較やその他の高度な機能を利用する
 
-![](https://img.shields.io/badge/🔨%20Example%20using%20AppliTools-blue.svg "Using Applitools") ![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Using Cypress to illustrate the idea")
+![](https://img.shields.io/badge/🔨%20Example%20using%20AppliTools-blue.svg "Applitoolsを使用した例") ![](https://img.shields.io/badge/🔨%20Example%20using%20Cypress-blue.svg "Cypressを使用してアイデアを示す")
 
 ```javascript
 import * as todoPage from "../page-objects/todo-page";
@@ -1511,12 +1509,12 @@ describe("visual validation", () => {
   afterEach(() => cy.eyesClose());
 
   it("should look good", () => {
-    cy.eyesCheckWindow("empty todo list");
+    cy.eyesCheckWindow("empty todo list"); // 空のToDoリストを確認
     todoPage.addTodo("Clean room");
     todoPage.addTodo("Learn javascript");
-    cy.eyesCheckWindow("two todos");
+    cy.eyesCheckWindow("two todos"); // 2つのToDoを確認
     todoPage.toggleTodo(0);
-    cy.eyesCheckWindow("mark as completed");
+    cy.eyesCheckWindow("mark as completed"); // 完了としてマークをチェック
   });
 });
 ```
