@@ -1523,140 +1523,142 @@ describe("visual validation", () => {
 
 <br/><br/>
 
-# Section 4️⃣: Measuring Test Effectiveness
+# Section 4️⃣: テストの効果測定
 
 <br/><br/>
 
-## ⚪ ️ 4.1 Get enough coverage for being confident, ~80% seems to be the lucky number
+## ⚪ ️4.1 十分なカバレッジを確保して自信を持つ、〜80%が幸運な数字のよう
 
-:white_check_mark: **Do:** The purpose of testing is to get enough confidence for moving fast, obviously the more code is tested the more confident the team can be. Coverage is a measure of how many code lines (and branches, statements, etc) are being reached by the tests. So how much is enough? 10–30% is obviously too low to get any sense about the build correctness, on the other side 100% is very expensive and might shift your focus from the critical paths to the exotic corners of the code. The long answer is that it depends on many factors like the type of application — if you’re building the next generation of Airbus A380 than 100% is a must, for a cartoon pictures website 50% might be too much. Although most of the testing enthusiasts claim that the right coverage threshold is contextual, most of them also mention the number 80% as a thumb of a rule ([Fowler: “in the upper 80s or 90s”](https://martinfowler.com/bliki/TestCoverage.html)) that presumably should satisfy most of the applications.
+:white_check_mark: **こうしましょう:** テストの目的は速く動くための十分な自信を得ることです。もちろん、より多くのコードがテストされればチームはより自信を持てます。カバレッジは、テストによってどれだけのコード行（およびブランチ、ステートメントなど）が到達されているかを測る指標です。では、どの程度が十分でしょうか？10–30%はビルドの正確性について判断するには明らかに低すぎ、逆に100%は非常に高価で、重大な経路からコードの珍しい隅に関心が移る可能性があります。長い答えとしては、多くの要因、例えばアプリケーションの種類によります。次世代のAirbus A380を構築するなら100%は必須ですが、漫画の画像サイトでは50%でさえ多すぎるかもしれません。ほとんどのテスト愛好家は、適切なカバレッジ閾値がコンテキストに依存すると主張しますが、多くの人が80%という数値を一般的なルールとして言及しています（[Fowler: "上位の80または90%"](https://martinfowler.com/bliki/TestCoverage.html)）、これはおそらくほとんどのアプリケーションを満足させるでしょう。
 
-Implementation tips: You may want to configure your continuous integration (CI) to have a coverage threshold ([Jest link](https://jestjs.io/docs/en/configuration.html#collectcoverage-boolean)) and stop a build that doesn’t stand to this standard (it’s also possible to configure threshold per component, see code example below). On top of this, consider detecting build coverage decrease (when a newly committed code has less coverage) — this will push developers raising or at least preserving the amount of tested code. All that said, coverage is only one measure, a quantitative based one, that is not enough to tell the robustness of your testing. And it can also be fooled as illustrated in the next bullets
-
-<br/>
-
-❌ **Otherwise:** Confidence and numbers go hand in hand, without really knowing that you tested most of the system — there will also be some fear and fear will slow you down
+実装のヒント: 継続的インテグレーション（CI）にカバレッジ閾値を設定し、これに準拠しないビルドを停止するように設定するかもしれません（[Jestリンク](https://jestjs.io/docs/en/configuration.html#collectcoverage-boolean)）。コンポーネントごとに閾値を設定することも可能です（下記のコード例を参照）。加えて、新しくコミットされたコードがカバレッジを減少している場合の検出を検討してください。これにより開発者はテストコードの量を増やすか、少なくとも維持するよう促されます。とは言え、カバレッジは一つの指標であり、定量的に基づいたもので、テストの堅牢性を伝えるには不十分です。そして、次の箇条書きで示すように、誤魔化されることもあります。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 自信と数字は密接な関係があり、システムのほとんどをテストしたと本当に知ることがなければ、恐怖が生まれ、その恐怖はあなたを遅くします。
 
 <br/>
 
-### :clap: Example: A typical coverage report
-
-![alt text](assets/bp-18-yoni-goldberg-code-coverage.png "A typical coverage report")
+<details><summary>✏ <b>コード例</b></summary>
 
 <br/>
 
-### :clap: Doing It Right Example: Setting up coverage per component (using Jest)
+### :clap: 例: 典型的なカバレッジレポート
 
-![](https://img.shields.io/badge/🔨%20Example%20using%20Jest-blue.svg "Using Jest")
+![alt text](assets/bp-18-yoni-goldberg-code-coverage.png "典型的なカバレッジレポート")
 
-![alt text](assets/bp-18-code-coverage2.jpeg "Setting up coverage per component (using Jest)")
+<br/>
+
+### :clap: 正しい例: コンポーネントごとにカバレッジを設定する（Jestを使用）
+
+![](https://img.shields.io/badge/🔨%20Example%20using%20Jest-blue.svg "Jestを使用")
+
+![alt text](assets/bp-18-code-coverage2.jpeg "コンポーネントごとにカバレッジを設定する（Jestを使用）")
 
 </details>
 
 <br/><br/>
 
-## ⚪ ️ 4.2 Inspect coverage reports to detect untested areas and other oddities
+## ⚪ ️4.2 カバレッジレポートを検査して未テストの領域やその他の異常を検出する
 
-:white_check_mark: **Do:** Some issues sneak just under the radar and are really hard to find using traditional tools. These are not really bugs but more of surprising application behavior that might have a severe impact. For example, often some code areas are never or rarely being invoked — you thought that the ‘PricingCalculator’ class is always setting the product price but it turns out it is actually never invoked although we have 10000 products in DB and many sales… Code coverage reports help you realize whether the application behaves the way you believe it does. Other than that, it can also highlight which types of code is not tested — being informed that 80% of the code is tested doesn’t tell whether the critical parts are covered. Generating reports is easy — just run your app in production or during testing with coverage tracking and then see colorful reports that highlight how frequent each code area is invoked. If you take your time to glimpse into this data — you might find some gotchas
-<br/>
-
-❌ **Otherwise:** If you don’t know which parts of your code are left un-tested, you don’t know where the issues might come from
+:white_check_mark: **こうしましょう:** 一部の問題は見落とされ、伝統的なツールを使って見つけるのが非常に難しいです。これらは本当にバグではなく、重大な影響を及ぼす可能性のある驚くべきアプリケーションの挙動です。例えば、あるコードエリアがまったく呼び出されないか、ほとんど呼び出されないことがあります — ‘PricingCalculator’クラスが常に製品価格を設定していると思っていたのに、実際には一度も呼び出されていない、ということがあります。DBには10000の製品があり、多くの販売があるのに… コードカバレッジレポートはアプリケーションがあなたの思う通りに動作しているかどうかを理解するのに役立ちます。それ以外にも、どの種類のコードがテストされていないかを強調表示することができます — コードの80%がテストされたという情報では、重要な部分がカバーされているかはわかりません。レポートの生成は簡単です — カバレッジ追跡を付けて本番環境またはテスト中にアプリを実行し、各コードエリアがどのくらいの頻度で呼び出されるかを強調したカラフルなレポートを確認します。これに目を通す時間を取れば、いくつかの重要な発見をするかもしれません。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** コードのどの部分がテストされていないかわからなければ、問題がどこから来る可能性があるかわかりません。
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: What’s wrong with this coverage report?
+<details><summary>✏ <b>コード例</b></summary>
 
-Based on a real-world scenario where we tracked our application usage in QA and find out interesting login patterns (Hint: the amount of login failures is non-proportional, something is clearly wrong. Finally it turned out that some frontend bug keeps hitting the backend login API)
+<br/>
 
-![alt text](assets/bp-19-coverage-yoni-goldberg-nodejs-consultant.png "What’s wrong with this coverage report?")
+### :thumbsdown: アンチパターン例: このカバレッジレポートの何が問題なのでしょうか？
+
+実際の事例に基づき、QAでアプリケーションの使用を追跡し、興味深いログインパターンを発見しました（ヒント: ログイン失敗の回数が不相応で、何かが明らかにおかしい。最終的には、あるフロントエンドのバグがバックエンドのログインAPIを繰り返し叩いていたことが判明しました）
+
+![alt text](assets/bp-19-coverage-yoni-goldberg-nodejs-consultant.png "このカバレッジレポートの何が問題なのでしょうか？")
 
 </details>
 
 <br/><br/>
 
-## ⚪ ️ 4.3 Measure logical coverage using mutation testing
+## ⚪ ️4.3 ミューテーションテストを使用して論理的カバレッジを測定する
 
-:white_check_mark: **Do:** The Traditional Coverage metric often lies: It may show you 100% code coverage, but none of your functions, even not one, return the right response. How come? it simply measures over which lines of code the test visited, but it doesn’t check if the tests actually tested anything — asserted for the right response. Like someone who’s traveling for business and showing his passport stamps — this doesn’t prove any work done, only that he visited few airports and hotels.
+:white_check_mark: **こうしましょう:** 伝統的なカバレッジ指標はしばしば誤解を招きます。100%のコードカバレッジを示していても、関数がひとつも、正しい応答を返していない可能性があります。どうしてでしょう？それはテストがどのコード行を訪れたかを測定するだけで、実際にテストが何かを検証したかどうか — 正しい応答を確認したかを確認していないからです。ビジネスで旅行してパスポートのスタンプを見せる人のように — これはどんな仕事をしたかを証明しているわけではなく、単にいくつかの空港やホテルを訪れたことを示しているに過ぎません。
 
-Mutation-based testing is here to help by measuring the amount of code that was actually TESTED not just VISITED. [Stryker](https://stryker-mutator.io/) is a JavaScript library for mutation testing and the implementation is really neat:
+ミューテーションベースのテストは、単に訪問しただけでなく、実際にテストされたコードの量を測定することによって助けになります。[Stryker](https://stryker-mutator.io/)はJavaScriptのミューテーションテスト用ライブラリで、実装は非常にスマートです:
 
-(1) it intentionally changes the code and “plants bugs”. For example the code newOrder.price===0 becomes newOrder.price!=0. This “bugs” are called mutations
+(1) コードを意図的に変更し、「バグを植え付ける」。例えば、コード `newOrder.price===0` を `newOrder.price!=0` に変える。この「バグ」を変異(mutations)と呼びます。
 
-(2) it runs the tests, if all succeed then we have a problem — the tests didn’t serve their purpose of discovering bugs, the mutations are so-called survived. If the tests failed, then great, the mutations were killed.
+(2) テストを実行し、すべて成功したら問題があります — テストはバグを発見するという目的を果たさなかったことを意味し、この変異は生き残ったことになります。テストが失敗したなら素晴らしい、変異は駆逐されました。
 
-Knowing that all or most of the mutations were killed gives much higher confidence than traditional coverage and the setup time is similar
-<br/>
-
-❌ **Otherwise:** You’ll be fooled to believe that 85% coverage means your test will detect bugs in 85% of your code
+すべてまたはほとんどのミューテーションが駆逐されたことを知っていることは、伝統的なカバレッジよりもはるかに高い信頼を与え、セットアップ時間は同様です。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 85%のカバレッジが、あなたのテストがコードの85%でバグを検出することを意味すると思い込まされます。
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: 100% coverage, 0% testing
+<details><summary>✏ <b>コード例</b></summary>
 
-![](https://img.shields.io/badge/🔨%20Example%20using%20Stryker-blue.svg "Using Stryker")
+<br/>
+
+### :thumbsdown: アンチパターンの例: 100%のカバレッジ、0%のテスト
+
+![](https://img.shields.io/badge/🔨%20Example%20using%20Stryker-blue.svg "Strykerを使用")
 
 ```javascript
 function addNewOrder(newOrder) {
   logger.log(`Adding new order ${newOrder}`);
   DB.save(newOrder);
-  Mailer.sendMail(newOrder.assignee, `A new order was places ${newOrder}`);
+  Mailer.sendMail(newOrder.assignee, `A new order was placed ${newOrder}`);
 
   return { approved: true };
 }
 
 it("Test addNewOrder, don't use such test names", () => {
   addNewOrder({ assignee: "John@mailer.com", price: 120 });
-}); //Triggers 100% code coverage, but it doesn't check anything
+}); //100%のコードカバレッジを引き起こしますが、何もチェックしていません
 ```
 
 <br/>
 
-### :clap: Doing It Right Example: Stryker reports, a tool for mutation testing, detects and counts the amount of code that is not tested (Mutations)
+### :clap: 正しい例: 変異テストのためのツール、Strykerレポートは、テストされていないコードの量（変異）を検出し、カウントします
 
-![alt text](assets/bp-20-yoni-goldberg-mutation-testing.jpeg "Stryker reports, a tool for mutation testing, detects and counts the amount of code that is not tested (Mutations)")
+![alt text](assets/bp-20-yoni-goldberg-mutation-testing.jpeg "ミューテーションテストのためのツール、Strykerレポートは、テストされていないコードの量（変異）を検出し、カウントします")
 
 </details>
 
 <br/><br/>
 
-## ⚪ ️4.4 Preventing test code issues with Test linters
+## ⚪ ️4.4 テストリンターでテストコードの問題を防ぐ
 
-:white_check_mark: **Do:** A set of ESLint plugins were built specifically for inspecting the tests code patterns and discover issues. For example, [eslint-plugin-mocha](https://www.npmjs.com/package/eslint-plugin-mocha) will warn when a test is written at the global level (not a son of a describe() statement) or when tests are [skipped](https://mochajs.org/#inclusive-tests) which might lead to a false belief that all tests are passing. Similarly, [eslint-plugin-jest](https://github.com/jest-community/eslint-plugin-jest) can, for example, warn when a test has no assertions at all (not checking anything)
-
-<br/>
-
-❌ **Otherwise:** Seeing 90% code coverage and 100% green tests will make your face wear a big smile only until you realize that many tests aren’t asserting for anything and many test suites were just skipped. Hopefully, you didn’t deploy anything based on this false observation
-
-<br/>
-<details><summary>✏ <b>Code Examples</b></summary>
+:white_check_mark: **こうしましょう:** ESLintプラグインのセットは、テストコードのパターンを検査して問題を発見するために特別に構築されました。例えば、[eslint-plugin-mocha](https://www.npmjs.com/package/eslint-plugin-mocha)は、テストがグローバルレベル（describe()ステートメントの子ではない）で書かれている場合や、テストが[スキップ](https://mochajs.org/#inclusive-tests)されている場合に警告を出します。これにより、すべてのテストが通っているという誤った認識が生じる可能性があります。同様に、[eslint-plugin-jest](https://github.com/jest-community/eslint-plugin-jest)は、テストに全くアサーションがない場合（何もチェックしていない）に警告を出すことができます。
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: A test case full of errors, luckily all are caught by Linters
+❌ **さもなくば:** 90%のコードカバレッジと100%のグリーンテストを見ると、顔が大きな笑顔に包まれますが、多くのテストが何もアサーションしておらず、多くのテストスイートがスキップされていることに気付くまでのことです。幸運を祈ることに、あなたがこの誤った認識に基づいて何もデプロイしていなかったことを。
+
+<br/>
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :thumbsdown: アンチパターン例: エラーだらけのテストケース、幸いにもすべてリンターが検出
 
 ```javascript
 describe("Too short description", () => {
-  const userToken = userService.getDefaultToken() // *error:no-setup-in-describe, use hooks (sparingly) instead
-  it("Some description", () => {});//* error: valid-test-description. Must include the word "Should" + at least 5 words
+  const userToken = userService.getDefaultToken() // *エラー:no-setup-in-describe、代わりにフックを（慎重に）使用してください
+  it("Some description", () => {});//* エラー: valid-test-description. "Should"という単語を含む + 少なくとも5語
 });
 
-it.skip("Test name", () => {// *error:no-skipped-tests, error:error:no-global-tests. Put tests only under describe or suite
-  expect("somevalue"); // error:no-assert
+it.skip("Test name", () => {// *エラー:no-skipped-tests, エラー:error:no-global-tests. テストはdescribeまたはスイートの下にのみ配置
+  expect("somevalue"); // エラー:no-assert
 });
 
-it("Test name", () => {*//error:no-identical-title. Assign unique titles to tests
+it("Test name", () => {*//エラー:no-identical-title. テストにユニークなタイトルを割り当ててください
 });
 ```
 
