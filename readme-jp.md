@@ -482,57 +482,57 @@ describe("Product service", () => {
 
 <br/><br/>
 
-## ⚪ ️ 1.8 If needed, use only short & inline snapshots
+## ⚪ ️ 1.8 必要に応じて、短くインラインのスナップショットを使用
 
-:white_check_mark: **Do:** When there is a need for [snapshot testing](https://jestjs.io/docs/en/snapshot-testing), use only short and focused snapshots (i.e. 3-7 lines) that are included as part of the test ([Inline Snapshot](https://jestjs.io/docs/en/snapshot-testing#inline-snapshots)) and not within external files. Keeping this guideline will ensure your tests remain self-explanatory and less fragile.
+:white_check_mark: **やるべきこと:** [スナップショットテスト](https://jestjs.io/docs/en/snapshot-testing)が必要な場合、短く集中したスナップショット（3〜7行程度）を使用し、テストの一部としてインラインで含めること（[Inline Snapshot](https://jestjs.io/docs/en/snapshot-testing#inline-snapshots)）が推奨されます。外部ファイルに保存しないことで、テストは自己説明的で壊れにくくなります。
 
-On the other hand, ‘classic snapshots’ tutorials and tools encourage to store big files (e.g. component rendering markup, API JSON result) over some external medium and ensure each time when the test run to compare the received result with the saved version. This, for example, can implicitly couple our test to 1000 lines with 3000 data values that the test writer never read and reasoned about. Why is this wrong? By doing so, there are 1000 reasons for your test to fail - it’s enough for a single line to change for the snapshot to get invalid and this is likely to happen a lot. How frequently? for every space, comment or minor CSS/HTML change. Not only this, the test name wouldn’t give a clue about the failure as it just checks that 1000 lines didn’t change, also it encourages to the test writer to accept as the desired true a long document he couldn’t inspect and verify. All of these are symptoms of obscure and eager test that is not focused and aims to achieve too much
+一方で、「クラシックスナップショット」のチュートリアルやツールは、大きなファイル（例：コンポーネントのレンダリングマークアップやAPIのJSON結果）を外部に保存し、テスト実行時に受け取った結果と保存されたバージョンを比較することを推奨しています。しかし、これにより、テストが1000行や3000個のデータ値に暗黙的に結び付けられ、テスト作成者がそれを読んで理解することができなくなります。なぜこれが問題なのでしょうか？ その理由は多岐にわたり、スナップショットが無効になるのに1行の変更で十分で、これは頻繁に発生します。具体的には、スペース、コメント、CSS/HTMLの小さな変更ごとに起こり得ます。このような場合、テスト名からエラーの手がかりを得ることは難しく、単に1000行が変更されなかったかをチェックするだけになります。また、テスト作成者が確認も検証もできない長文ドキュメントを望ましい真実として受け入れるように促します。これらはすべて、焦点が定まらず、過剰な目標を達成しようとする不透明で過度なテストの症状です。
 
-It’s worth noting that there are few cases where long & external snapshots are acceptable - when asserting on schema and not data (extracting out values and focusing on fields) or when the received document rarely changes
+なお、スキーマを確認し、データを確認しない場合（フィールドに焦点を当て、値を抽出する）や、受け取るドキュメントがほとんど変更されない場合など、長い外部スナップショットが受け入れられるケースも少しだけあります。
 <br/>
 
-❌ **Otherwise:** A UI test fails. The code seems right, the screen renders perfect pixels, what happened? your snapshot testing just found a difference from the origin document to current received one - a single space character was added to the markdown...
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** UIテストが失敗します。コードは正しいように見え、画面は完璧にレンダリングされているのに、何が起こったのでしょうか？ スナップショットテストは、元のドキュメントと現在受け取ったものとの差異を発見しました—マークダウンにスペースが1つ追加されていただけでした...
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: Coupling our test to unseen 2000 lines of code
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :thumbsdown: アンチパターン例: 目に見えない2000行のコードにテストを結び付ける
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Jest-blue.svg "Examples with Jest")
 
 ```javascript
 it("TestJavaScript.com is renderd correctly", () => {
-  //Arrange
+  //Arrange(準備する)
 
-  //Act
+  //Act(動かす)
   const receivedPage = renderer
     .create(<DisplayPage page="http://www.testjavascript.com"> Test JavaScript </DisplayPage>)
     .toJSON();
 
-  //Assert
+  //Assert(確認する)
   expect(receivedPage).toMatchSnapshot();
-  //We now implicitly maintain a 2000 lines long document
-  //every additional line break or comment - will break this test
+  //これで私たちは暗黙的に2000行のドキュメントを維持することになります
+  //追加の改行やコメントごとに、このテストは壊れます
 });
 ```
 
 <br/>
 
-### :clap: Doing It Right Example: Expectations are visible and focused
+### :clap: 正しい例: 期待値が明確で集中している
 
 ```javascript
 it("When visiting TestJavaScript.com home page, a menu is displayed", () => {
-  //Arrange
+  //Arrange(準備する)
 
-  //Act
+  //Act(動かす)
   const receivedPage = renderer
     .create(<DisplayPage page="http://www.testjavascript.com"> Test JavaScript </DisplayPage>)
     .toJSON();
 
-  //Assert
+  //Assert(確認する)
 
   const menu = receivedPage.content.menu;
   expect(menu).toMatchInlineSnapshot(`
@@ -549,84 +549,82 @@ it("When visiting TestJavaScript.com home page, a menu is displayed", () => {
 
 <br/><br/>
 
-## ⚪ ️1.9 Avoid global test fixtures and seeds, add data per-test
+## ⚪ ️ 1.9 必要なコードのみをコピーする
 
-:white_check_mark: **Do:** Going by the golden rule (bullet 0), each test should add and act on its own set of DB rows to prevent coupling and easily reason about the test flow. In reality, this is often violated by testers who seed the DB with data before running the tests ([also known as ‘test fixture’](https://en.wikipedia.org/wiki/Test_fixture)) for the sake of performance improvement. While performance is indeed a valid concern — it can be mitigated (see “Component testing” bullet), however, test complexity is a much painful sorrow that should govern other considerations most of the time. Practically, make each test case explicitly add the DB records it needs and act only on those records. If performance becomes a critical concern — a balanced compromise might come in the form of seeding the only suite of tests that are not mutating data (e.g. queries)
+:white_check_mark: **Do:** テスト結果に影響を与える必要な詳細はすべて含めますが、それ以上は含めません。例えば、100行の入力JSONを処理するテストを考えてみましょう。これを毎回テストに貼り付けるのは手間です。これを外部に抽出して `transferFactory.getJSON()` とすると、テストが曖昧になってしまいます — データがなければ、テスト結果とその原因を関連付けるのが難しくなります（「なぜ400ステータスを返すべきなのか？」）。古典的な書籍「x-unitパターン」では、このパターンを「謎のゲスト」と呼んでいます — 何か見えないものがテスト結果に影響を与えていますが、正確には何が影響を与えたのか分かりません。繰り返し使われる長い部分を外部に抽出し、テストに重要な具体的な詳細を明示的に示すことで、改善できます。上記の例を使うと、テストは重要な部分を強調するパラメーターを渡すことができます：`transferFactory.getJSON({sender: undefined})`。この例では、読者はすぐに「senderフィールドが空であることが、テストがバリデーションエラーやその他の適切な結果を期待する理由である」と推測すべきです。
 <br/>
 
-❌ **Otherwise:** Few tests fail, a deployment is aborted, our team is going to spend precious time now, do we have a bug? let’s investigate, oh no — it seems that two tests were mutating the same seed data
-
-<br/>
-
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 500行のJSONをコピーすることは、テストを維持不可能で読みにくくします。すべてを外部に移動すると、理解しにくい曖昧なテストが生まれます
 
 <br/>
 
-### :thumbsdown: Anti-Pattern Example: tests are not independent and rely on some global hook to feed global DB data
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+
+### :thumbsdown: アンチパターン例: テストの失敗が不明確で、原因が外部にあり、大きなJSON内に隠れている
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Mocha-blue.svg "Examples with Mocha")
 
 ```javascript
-before(async () => {
-  //adding sites and admins data to our DB. Where is the data? outside. At some external json or migration framework
-  await DB.AddSeedDataFromJson('seed.json');
-});
-it("When updating site name, get successful confirmation", async () => {
-  //I know that site name "portal" exists - I saw it in the seed files
-  const siteToUpdate = await SiteService.getSiteByName("Portal");
-  const updateNameResult = await SiteService.changeName(siteToUpdate, "newName");
-  expect(updateNameResult).to.be(true);
-});
-it("When querying by site name, get the right site", async () => {
-  //I know that site name "portal" exists - I saw it in the seed files
-  const siteToCheck = await SiteService.getSiteByName("Portal");
-  expect(siteToCheck.name).to.be.equal("Portal"); //Failure! The previous test change the name :[
-});
+test("クレジットがない場合、転送は拒否される", async() => {
+      //Arrange(準備する)
+      const transferRequest = testHelpers.factorMoneyTransfer() //200行のJSONが返ってくる;
+      const transferServiceUnderTest = new TransferService();
 
+      //Act(動かす)
+      const transferResponse = await transferServiceUnderTest.transfer(transferRequest);
+
+      //Assert(確認する)
+      expect(transferResponse.status).toBe(409);// でもなぜ失敗を期待するのか: テスト内ではすべてが完璧に有効に見える 🤔
+    });
 ```
 
 <br/>
 
-### :clap: Doing It Right Example: We can stay within the test, each test acts on its own set of data
+### :clap: 正しい例: テスト結果の原因を強調する
 
 ```javascript
-it("When updating site name, get successful confirmation", async () => {
-  //test is adding a fresh new records and acting on the records only
-  const siteUnderTest = await SiteService.addSite({
-    name: "siteForUpdateTest"
-  });
+test("クレジットがない場合、転送は拒否される", async() => {
+      //Arrange(準備する)
+      const transferRequest = testHelpers.factorMoneyTransfer({userCredit:100, transferAmount:200}) // 明らかにクレジットが不足している
+      const transferServiceUnderTest = new TransferService({disallowOvercharge:true});
 
-  const updateNameResult = await SiteService.changeName(siteUnderTest, "newName");
+      //Act(動かす)
+      const transferResponse = await transferServiceUnderTest.transfer(transferRequest);
 
-  expect(updateNameResult).to.be(true);
-});
+      //Assert(確認する)
+      expect(transferResponse.status).toBe(409); // ユーザーにクレジットがない場合、明らかに失敗するべき
+    });
 ```
 
 </details>
 
-<br/>
+<br/><br/>
 
-## ⚪ ️ 1.10 Don’t catch errors, expect them
+## ⚪ ️ 1.10 エラーをキャッチせず、エラーを期待する
 
-:white_check_mark: **Do:** When trying to assert that some input triggers an error, it might look right to use try-catch-finally and asserts that the catch clause was entered. The result is an awkward and verbose test case (example below) that hides the simple test intent and the result expectations
+:white_check_mark: **やるべきこと:** ある入力がエラーを引き起こすことをアサートしようとするとき、try-catch-finallyを使用してcatch句が実行されたことを確認するのは正しいように見えるかもしれません。しかし、その結果はシンプルなテストの意図や結果の期待を隠してしまう、冗長で不格好なテストケースになります（以下の例参照）。
 
-A more elegant alternative is the using the one-line dedicated Chai assertion: expect(method).to.throw (or in Jest: expect(method).toThrow()). It’s absolutely mandatory to also ensure the exception contains a property that tells the error type, otherwise given just a generic error the application won’t be able to do much rather than show a disappointing message to the user
-<br/>
-
-❌ **Otherwise:** It will be challenging to infer from the test reports (e.g. CI reports) what went wrong
+よりエレガントな代替手段は、専用のChaiアサーションを1行で使用することです：expect(method).to.throw（またはJestではexpect(method).toThrow()）。また、例外がエラータイプを示すプロパティを含むことを確認することが絶対に必要です。さもないと、単なる一般的なエラーを渡すだけでは、アプリケーションはユーザーに失望させるメッセージを表示する以外に多くのことができません。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** テストレポート（例: CIレポート）から何が問題だったのかを推測するのが難しくなります。
 
 <br/>
 
-### :thumbsdown: Anti-pattern Example: A long test case that tries to assert the existence of error with try-catch
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :thumbsdown: アンチパターン例: try-catchでエラーの存在をアサートしようとする冗長なテストケース
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Mocha-blue.svg "Examples with Mocha")
 
 ```javascript
-it("When no product name, it throws error 400", async () => {
+it("商品名がない場合、エラー400をスローする", async () => {
   let errorWeExceptFor = null;
   try {
     const result = await addNewProduct({});
@@ -635,17 +633,17 @@ it("When no product name, it throws error 400", async () => {
     errorWeExceptFor = error;
   }
   expect(errorWeExceptFor).not.to.be.null;
-  //if this assertion fails, the tests results/reports will only show
-  //that some value is null, there won't be a word about a missing Exception
+  // このアサーションが失敗した場合、テスト結果/レポートには
+  // 値がnullであることしか表示されず、例外が見つからないことについては言及されません
 });
 ```
 
 <br/>
 
-### :clap: Doing It Right Example: A human-readable expectation that could be understood easily, maybe even by QA or technical PM
+### :clap: 正しい例: QAや技術的なPMでも簡単に理解できる人間が読めるexpect
 
 ```javascript
-it("When no product name, it throws error 400", async () => {
+it("商品名がない場合、エラー400をスローする", async () => {
   await expect(addNewProduct({}))
     .to.eventually.throw(AppError)
     .with.property("code", "InvalidInput");
@@ -656,30 +654,31 @@ it("When no product name, it throws error 400", async () => {
 
 <br/><br/>
 
-## ⚪ ️ 1.11 Tag your tests
+## ⚪ ️ 1.11 テストにタグを付ける
 
-:white_check_mark: **Do:** Different tests must run on different scenarios: quick smoke, IO-less, tests should run when a developer saves or commits a file, full end-to-end tests usually run when a new pull request is submitted, etc. This can be achieved by tagging tests with keywords like #cold #api #sanity so you can grep with your testing harness and invoke the desired subset. For example, this is how you would invoke only the sanity test group with Mocha: mocha — grep ‘sanity’
-<br/>
-
-❌ **Otherwise:** Running all the tests, including tests that perform dozens of DB queries, any time a developer makes a small change can be extremely slow and keeps developers away from running tests
+:white_check_mark: **やるべきこと:** 異なるテストは異なるシナリオで実行する必要があります。例えば、クイックなスモークテストやI/Oレスなテストは、開発者がファイルを保存またはコミットしたときに実行し、フルなエンドツーエンドテストは通常、プルリクエストが提出されたときに実行されます。これを実現するためには、#cold #api #sanity などのキーワードでテストにタグを付け、テストハーネスでgrepを使って必要なサブセットを呼び出すことができます。例えば、Mochaでsanityテストグループのみを呼び出す方法は以下の通りです：mocha — grep ‘sanity’
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** 開発者が小さな変更を加えるたびに、データベースクエリを数十回実行するテストも含めてすべてのテストを実行するのは非常に遅くなり、開発者がテストを実行するのを避ける原因となります。
 
 <br/>
 
-### :clap: Doing It Right Example: Tagging tests as ‘#cold-test’ allows the test runner to execute only fast tests (Cold===quick tests that are doing no IO and can be executed frequently even as the developer is typing)
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: ‘#cold-test’としてテストにタグを付けることで、テストランナーは高速なテストのみを実行できるようになります（Cold === I/Oを行わない迅速なテストで、開発者が入力している間でも頻繁に実行できます）
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Jest-blue.svg "Examples with Jest")
 
 ```javascript
-//this test is fast (no DB) and we're tagging it correspondigly
-//now the user/CI can run it frequently
+//このテストは高速で（DBを使用しない）、それに応じてタグ付けしています
+//これでユーザーやCIは頻繁に実行できます
 describe("Order service", function() {
-  describe("Add new order #cold-test #sanity", function() {
-    test("Scenario - no currency was supplied. Expectation - Use the default currency #sanity", function() {
-      //code logic here
+  describe("新しい注文の追加 #cold-test #sanity", function() {
+    test("シナリオ - 通貨が指定されていない。期待 - デフォルト通貨を使用 #sanity", function() {
+      //コードロジックここに
     });
   });
 });
@@ -689,33 +688,33 @@ describe("Order service", function() {
 
 <br/><br/>
 
-## ⚪ ️ 1.12 Categorize tests under at least 2 levels
+## ⚪ ️ 1.12 テストを少なくとも2つのレベルで分類する
 
-:white_check_mark: **Do:** Apply some structure to your test suite so an occasional visitor could easily understand the requirements (tests are the best documentation) and the various scenarios that are being tested. A common method for this is by placing at least 2 'describe' blocks above your tests: the 1st is for the name of the unit under test and the 2nd for additional level of categorization like the scenario or custom categories (see code examples and print screen below). Doing so will also greatly improve the test reports: The reader will easily infer the tests categories, delve into the desired section and correlate failing tests. In addition, it will get much easier for a developer to navigate through the code of a suite with many tests. There are multiple alternative structures for test suite that you may consider like [given-when-then](https://github.com/searls/jasmine-given) and [RITE](https://github.com/ericelliott/riteway)
-
-<br/>
-
-❌ **Otherwise:** When looking at a report with flat and long list of tests, the reader have to skim-read through long texts to conclude the major scenarios and correlate the commonality of failing tests. Consider the following case: When 7/100 tests fail, looking at a flat list will demand reading the failing tests text to see how they relate to each other. However, in a hierarchical report all of them could be under the same flow or category and the reader will quickly infer what or at least where is the root failure cause
+:white_check_mark: **するべきこと:** テストスイートにある程度の構造を適用し、偶然訪れる人がテストの要件（テストは最高のドキュメント）やテストされているさまざまなシナリオを簡単に理解できるようにします。この方法の一般的なものは、テストの前に少なくとも2つの'describe'ブロックを配置することです。1つ目はテスト対象のユニットの名前、2つ目はシナリオやカスタムカテゴリーなどの追加の分類レベルです（以下のコード例とスクリーンショットを参照）。これにより、テストレポートが大幅に改善されます：読者はテストのカテゴリーを簡単に推測し、希望するセクションに深入りして失敗したテストと相関させることができます。さらに、多くのテストを含むスイートのコードを開発者がナビゲートするのがずっと簡単になります。テストスイートの構造に関して、[given-when-then](https://github.com/searls/jasmine-given) や [RITE](https://github.com/ericelliott/riteway) などの複数の代替構造を検討することができます。
 
 <br/>
 
-<details><summary>✏ <b>Code Examples</b></summary>
+❌ **さもなくば:** フラットで長いテストのリストを見たとき、長いテキストをざっと読んで主要なシナリオを結論し、失敗したテストの共通点を相関させる必要があります。例えば、100のテストのうち7つが失敗した場合、フラットなリストでは失敗したテストのテキストを読み、どのように関連しているかを確認しなければなりません。しかし、階層的なレポートでは、すべてが同じフローやカテゴリの下にあり、原因をすばやく推測できます。少なくともどこが根本的な失敗の原因かを推測することができます。
 
 <br/>
 
-### :clap: Doing It Right Example: Structuring suite with the name of unit under test and scenarios will lead to the convenient report that is shown below
+<details><summary>✏ <b>コード例</b></summary>
+
+<br/>
+
+### :clap: 正しい例: テスト対象ユニットとシナリオでスイートを構造化すると、以下のような便利なレポートが得られます
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Jest-blue.svg "Examples with Jest")
 
 ```javascript
-// Unit under test
+// テスト対象ユニット
 describe("Transfer service", () => {
-  //Scenario
+  // シナリオ
   describe("When no credit", () => {
-    //Expectation
+    // 期待値
     test("Then the response status should decline", () => {});
 
-    //Expectation
+    // 期待値
     test("Then it should send email to admin", () => {});
   });
 });
@@ -725,16 +724,16 @@ describe("Transfer service", () => {
 
 <br/>
 
-### :thumbsdown: Anti-pattern Example: A flat list of tests will make it harder for the reader to identify the user stories and correlate failing tests
+### :thumbsdown: アンチパターン例: テストのフラットなリストは、読者がユーザーストーリーを特定し、失敗したテストを関連付けるのを難しくする
 
 ![](https://img.shields.io/badge/🔧%20Example%20using%20Jest-blue.svg "Examples with Mocha")
 
 ```javascript
-test("Then the response status should decline", () => {});
+test("レスポンスステータスが拒否されるべき", () => {});
 
-test("Then it should send email", () => {});
+test("それが管理者にメールを送信するべき", () => {});
 
-test("Then there should not be a new transfer record", () => {});
+test("新しい転送レコードが作成されないべき", () => {});
 ```
 
 ![alt text](assets/flat-report.png)
@@ -745,14 +744,14 @@ test("Then there should not be a new transfer record", () => {});
 
 <br/><br/>
 
-## ⚪ ️1.13 Other generic good testing hygiene
+## ⚪ ️1.13 その他の一般的な良いテスト習慣
 
-:white_check_mark: **Do:** This post is focused on testing advice that is related to, or at least can be exemplified with Node JS. This bullet, however, groups few non-Node related tips that are well-known
+:white_check_mark: **Do:** この投稿は、Node JSに関連した、または少なくともNode JSを例に挙げて説明できるテストに関するアドバイスに焦点を当てています。ただし、この項目では、Nodeに関連しないいくつかのよく知られたアドバイスをまとめています。
 
-Learn and practice [TDD principles](https://www.sm-cloud.com/book-review-test-driven-development-by-example-a-tldr/) — they are extremely valuable for many but don’t get intimidated if they don’t fit your style, you’re not the only one. Consider writing the tests before the code in a [red-green-refactor style](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html), ensure each test checks exactly one thing, when you find a bug — before fixing write a test that will detect this bug in the future, let each test fail at least once before turning green, start a module by writing a quick and simplistic code that satisfies the test - then refactor gradually and take it to a production grade level, avoid any dependency on the environment (paths, OS, etc)
+[TDDの原則](https://www.sm-cloud.com/book-review-test-driven-development-by-example-a-tldr/)を学び、実践する — これは多くの人にとって非常に価値がありますが、自分のスタイルに合わない場合でも気にしないでください、あなたが唯一の人ではありません。コードの前にテストを書くことを検討し、[レッド・グリーン・リファクタリングスタイル](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html)を採用し、各テストが正確に1つのことをチェックするようにしましょう。バグを見つけた場合は、それを修正する前にそのバグを将来検出できるテストを書き、少なくとも1回はテストを失敗させた後に成功するようにしましょう。モジュールを始めるときは、最初にテストを満たすための簡単でシンプルなコードを書き、その後、徐々にリファクタリングして本番用の品質に仕上げていきます。環境（パス、OSなど）への依存は避けましょう。
 <br/>
 
-❌ **Otherwise:** You‘ll miss pearls of wisdom that were collected for decades
+❌ **Otherwise:** 数十年にわたって集められた知恵の宝石を見逃すことになります
 
 <br/><br/>
 
