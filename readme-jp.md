@@ -1883,7 +1883,7 @@ license-checker --summary --failOn BSD
 
 <br/><br/>
 
-# Team
+# チーム
 
 ## Yoni Goldberg
 
@@ -1891,11 +1891,11 @@ license-checker --summary --failOn BSD
 <img width="480px" src="assets/yoni-goldberg.jpg"/>
 <br/>
 
-**Role:** Writer
+**役割:** ライター
 
-**About:** I'm an independent consultant who works with Fortune 500 companies and garage startups on polishing their JS & Node.js applications. More than any other topic I'm fascinated by and aims to master the art of testing. I'm also the author of [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
+**概要:** 私は独立したコンサルタントであり、Fortune 500企業やガレージスタートアップと協力してJS & Node.jsアプリケーションの磨き上げを行っています。他のどのトピックよりも、テストの技術に魅了され、習得を目指しています。また、[Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)の著者でもあります。
 
-**📗 Online Course:** Liked this guide and wish to take your testing skills to the extreme? Consider visiting my comprehensive course [Testing Node.js & JavaScript From A To Z](https://www.testjavascript.com)
+**📗 オンラインコース:** このガイドを気に入って、テストスキルを極限まで高めたいと考えているなら、私の包括的なコース [Testing Node.js & JavaScript From A To Z](https://www.testjavascript.com) を訪問してみてください。
 
 <br/>
 
@@ -1911,30 +1911,30 @@ license-checker --summary --failOn BSD
 
 ## [Bruno Scheufler](https://github.com/BrunoScheufler)
 
-**Role:** Tech reviewer and advisor
+**役割:** 技術レビュアーおよびアドバイザー
 
-Took care to revise, improve, lint and polish all the texts
+すべてのテキストの改訂、改善、リンティング、磨き上げを担当
 
-**About:** full-stack web engineer, Node.js & GraphQL enthusiast
+**概要:** フルスタックウェブエンジニア、Node.js & GraphQLのエンスージアスト
 
 <hr/>
 <br/>
 
 ## [Ido Richter](https://github.com/idori)
 
-**Role:** Concept, design and great advice
+**役割:** コンセプト、デザイン、素晴らしいアドバイス
 
-**About:** A savvy frontend developer, CSS expert and emojis freak
+**概要:** 精通したフロントエンドデベロッパー、CSSの専門家、絵文字愛好家
 
 ## [Kyle Martin](https://github.com/js-kyle)
 
-**Role:** Helps keep this project running, and reviews security related practices
+**役割:** このプロジェクトの運営を支援し、セキュリティ関連のプラクティスをレビュー
 
-**About:** Loves working on Node.js projects and web application security.
+**概要:** Node.jsプロジェクトとウェブアプリケーションセキュリティに携わることを愛する
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people who have contributed to this repository!
+このリポジトリに貢献してくれた素晴らしい人々に感謝します！
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
